@@ -1,0 +1,12 @@
+{
+  "name": "Garáž",
+  "short_name": "Garáž",
+  "lang": "cs",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#E7F0FA",
+  "theme_color": "#E7F0FA",
+  "icons": [{ "src": "apple-touch-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }]
+}
