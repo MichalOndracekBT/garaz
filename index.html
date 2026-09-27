@@ -570,15 +570,16 @@ const arch = (x, r) => `L${x + r} 206 A${r} ${r} 0 0 0 ${x - r} 206`;
 const SEDAN = `M32 206 L32 170 Q32 156 46 153 L98 146 L140 110 Q150 100 166 99 L252 99 Q268 99 280 109 L318 142 L364 150 Q382 154 384 172 L384 206 ${arch(300, 36)} ${arch(100, 36)} Z`;
 const sedanBody = color => p(SEDAN, col('r', color)) +
   sh('M48 159 L364 159 Q376 161 380 168 L44 168 Q44 162 48 159 Z') + shd('M136 192 L264 192 L264 206 L136 206 Z') +
-  p('M207 104 L207 200 M140 150 Q136 172 140 196', 'l thin') + rc(176, 156, 14, 4, 2, 'k') + rc(264, 156, 14, 4, 2, 'k');
+  p('M207 104 L207 200 M140 150 Q136 172 140 196', 'l thin') + rc(176, 156, 14, 4, 2, 'k') + rc(264, 156, 14, 4, 2, 'k') +
+  p('M30 190 L58 190 Q64 196 64 206 L30 206 Z', col('r', DARK)) + p('M32 160 L48 157 L48 176 L32 176 Z', col('r', REDL));
 const SEDAN_WIN = p('M106 146 L146 113 Q152 107 162 107 L202 107 L202 146 Z', col('r', GLASS)) + p('M212 107 L250 107 Q262 107 270 115 L304 146 L212 146 Z', col('r', GLASS));
-const SEDAN_BUMP = p('M354 190 L386 190 L386 206 L348 206 Q348 196 354 190 Z', col('r', DARK)) + p('M30 190 L58 190 Q64 196 64 206 L30 206 Z', col('r', DARK));
-const SEDAN_LIGHTS = p('M362 156 L382 162 L382 174 L358 170 Z', col('r', LAMP)) + p('M32 160 L48 157 L48 176 L32 176 Z', col('r', REDL));
+const SEDAN_BUMP = p('M354 190 L386 190 L386 206 L348 206 Q348 196 354 190 Z', col('r', DARK));
+const SEDAN_LIGHT = p('M362 156 L382 162 L382 174 L358 170 Z', col('r', LAMP));
 
 // Builder vehicles: side view, front on the right, standing on y≈234; parts listed back to front.
 const VEHICLES = [
   { id: 'car', name: 'Osobní auto', e: '🚗', parts: [
-    ['Karoserie', sedanBody('#E53935')], ['Okna', SEDAN_WIN], ['Světla', SEDAN_LIGHTS], ['Nárazníky', SEDAN_BUMP],
+    ['Karoserie', sedanBody('#E53935')], ['Okna', SEDAN_WIN], ['Světlo', SEDAN_LIGHT], ['Nárazník', SEDAN_BUMP],
     ['Zrcátko', p('M292 128 L310 125 L312 138 L297 140 Z', col('r', '#C62828'))],
     ['Kolo', wheel(100, 204)], ['Kolo', wheel(300, 204)]] },
   { id: 'race', name: 'Závodní auto', e: '🏎️', parts: [
@@ -603,23 +604,23 @@ const VEHICLES = [
     ['Pruh', p('M42 158 L376 158 L380 168 L40 168 Z', col('r', '#1E63D6')) + txt(214, 166, 'POLICIE', 9, 'hl')],
     ['Okna', SEDAN_WIN],
     ['Maják', rc(184, 89, 28, 10, 4, col('r', '#E53935')) + rc(212, 89, 28, 10, 4, col('r', '#1E63D6'))],
-    ['Nárazníky', SEDAN_BUMP],
+    ['Světlo', SEDAN_LIGHT], ['Nárazník', SEDAN_BUMP],
     ['Kolo', wheel(100, 204)], ['Kolo', wheel(300, 204)]] },
   { id: 'ambulance', name: 'Sanitka', e: '🚑', parts: [
     ['Karoserie', p(`M30 206 L30 92 Q30 80 42 80 L276 80 Q290 80 298 90 L342 138 L368 146 Q384 152 384 170 L384 206 ${arch(300, 36)} ${arch(100, 36)} Z`, col('r', '#FFFFFF')) +
-      shd('M136 192 L264 192 L264 206 L136 206 Z') + p('M206 84 L206 200', 'l thin')],
+      shd('M136 192 L264 192 L264 206 L136 206 Z') + p('M206 84 L206 200', 'l thin') + rc(30, 96, 8, 24, 2, col('r', REDL))],
     ['Okna', p('M288 94 L298 94 L336 138 L288 138 Z', col('r', GLASS)) + rc(214, 94, 64, 40, 5, col('r', GLASS))],
     ['Pruh', p('M32 156 L376 156 L381 166 L32 166 Z', col('r', '#E53935'))],
     ['Kříž', p('M130 100 h22 v20 h20 v22 h-20 v20 h-22 v-20 h-20 v-22 h20 Z', col('r', '#E53935'))],
     ['Maják', rc(148, 70, 44, 10, 4, col('r', '#2979FF'))],
-    ['Světla', p('M368 172 L384 174 L384 186 L366 184 Z', col('r', LAMP)) + rc(30, 96, 8, 24, 2, col('r', REDL))],
+    ['Světlo', p('M368 172 L384 174 L384 186 L366 184 Z', col('r', LAMP))],
     ['Kolo', wheel(100, 204)], ['Kolo', wheel(300, 204)]] },
   { id: 'bus', name: 'Autobus', e: '🚌', parts: [
     ['Karoserie', p(`M22 206 L22 88 Q22 74 36 74 L360 74 Q380 74 382 92 L386 206 ${arch(314, 34)} ${arch(94, 34)} Z`, col('r', '#FFC400')) +
-      sh('M24 80 L380 80 L381 87 L23 87 Z', .4) + shd('M22 170 L386 170 L386 178 L22 178 Z')],
+      sh('M24 80 L380 80 L381 87 L23 87 Z', .4) + shd('M22 170 L386 170 L386 178 L22 178 Z') + rc(22, 160, 8, 18, 2, col('r', REDL))],
     ['Okna', [34, 86, 138, 190, 242].map(x => rc(x, 90, 46, 40, 5, col('r', GLASS))).join('') + p('M338 88 L370 88 Q378 88 378 98 L380 152 L338 152 Z', col('r', GLASS))],
     ['Dveře', rc(290, 90, 40, 110, 4, col('r', '#B0BEC5')) + p('M310 90 L310 200', 'l thin')],
-    ['Světla', rc(372, 166, 12, 12, 3, col('r', LAMP)) + rc(22, 160, 8, 18, 2, col('r', REDL))],
+    ['Světlo', rc(372, 166, 12, 12, 3, col('r', LAMP))],
     ['Kolo', wheel(94, 204)], ['Kolo', wheel(314, 204)]] },
   { id: 'truck', name: 'Náklaďák', e: '🚚', parts: [
     ['Kontejner', rc(22, 62, 250, 126, 6, col('r', '#FF7A1A')) + sh('M24 66 L270 66 L270 73 L24 73 Z', .35) + p('M72 68 V184 M122 68 V184 M172 68 V184 M222 68 V184', 'l thin')],
