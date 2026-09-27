@@ -229,17 +229,22 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 /* BUILDER */
 .bd-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:0 12px 10px}
 #bdSvg{width:100%;height:100%;display:block;touch-action:none}
-.ghost{pointer-events:none}
-.ghost .r,.ghost .k{fill:rgba(255,255,255,.1)!important;stroke:rgba(255,255,255,.85)!important;stroke-dasharray:8 6;stroke-width:3!important}
-.ghost .l{stroke:rgba(255,255,255,.45)}
-.ghost text{fill:rgba(255,255,255,.35)!important;stroke:none!important}
+.sh{display:none}
+.bd .sh{display:inline}
+.bd .r{stroke:#2A3340;stroke-width:1.6}
+.bd .l{stroke:rgba(20,30,45,.5);stroke-width:1.5}
+.l.thin{stroke-width:2.5}
+.bd .l.thin{stroke-width:1.2}
+.ghost{pointer-events:none;opacity:.26}
+.bd .ghost .r{stroke:#3D4B60;stroke-width:1.2}
+.ghost .sh{display:none}
 #bdSvg .part{cursor:grab}
-#bdSvg .part.lift{filter:drop-shadow(0 10px 6px rgba(0,0,0,.35))}
-#bdSvg .part.anim{transition:transform .22s cubic-bezier(.3,1.4,.6,1)}
+#bdSvg .part.lift{filter:drop-shadow(0 8px 6px rgba(0,0,0,.3))}
+#bdSvg .part.anim{transition:transform .22s cubic-bezier(.3,1.3,.6,1)}
 #bdPlaced.drive{transition:transform 1.3s cubic-bezier(.55,0,.85,.35)}
 #bdPlaced.spin .wheelpart .pin{animation:spin .45s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-#artPuzzle{background:#2F6FD6}
+#artPuzzle{background:#EEF3F8}
 
 /* COLORING */
 .cl-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:0 16px 8px}
@@ -553,84 +558,107 @@ const BG = '<rect class="r bg" width="400" height="400"/>';
 // class hack: data-c holds the part's colour for the builder (coloring pages leave it white)
 const col = (k, color) => `${k}" data-c="${color}`;
 const txt = (x, y, s, size, k = 'k', style = '') => `<text class="${k}" x="${x}" y="${y}" text-anchor="middle" font-size="${size}" font-weight="800"${style ? ` style="${style}"` : ''}>${s}</text>`;
-const GLASS = '#9FD8FF', TIRE = '#2B2F36', HUB = '#C9D1DB';
-const wheel = (x, y, r = 28) => c(x, y, r, col('r', TIRE)) + c(x, y, r * .46, col('r', HUB)) +
-  p(`M${x - r * .3} ${y} L${x + r * .3} ${y} M${x} ${y - r * .3} L${x} ${y + r * .3}`, 'l');
-const CAR = 'M40 200 L40 162 Q42 142 66 139 L122 134 L160 96 Q168 88 182 88 L266 88 Q280 88 290 98 L326 134 L356 140 Q372 146 372 166 L372 200 Z';
-const CAR_WIN = p('M170 102 L140 132 L204 132 L204 102 Z', col('r', GLASS)) + p('M216 102 L216 132 L304 132 L276 102 Z', col('r', GLASS));
+const GLASS = 'url(#gGlass)', TIRE = 'url(#gTire)', RIM = 'url(#gRim)', DARK = '#3A4350', CHROME = '#C7CED8', LAMP = '#FFF4C2', REDL = '#D32F2F';
+// shading overlays: only visible in the builder (hidden on coloring pages)
+const sh = (d, o = .3) => `<path class="sh" d="${d}" fill="#fff" opacity="${o}"/>`;
+const shd = (d, o = .14) => `<path class="sh" d="${d}" fill="#000" opacity="${o}"/>`;
+const wheel = (x, y, r = 30) => c(x, y, r, col('r', TIRE)) + c(x, y, r * .6, col('r', RIM)) +
+  p(Array.from({ length: 5 }, (_, i) => { const a = i * 1.2566 - 1.5708; return `M${x} ${y} L${(x + Math.cos(a) * r * .56).toFixed(1)} ${(y + Math.sin(a) * r * .56).toFixed(1)}`; }).join(' '), 'l thin') +
+  c(x, y, r * .17, 'k');
+// wheel arch cut into a body outline that is drawn right-to-left along the bottom edge
+const arch = (x, r) => `L${x + r} 206 A${r} ${r} 0 0 0 ${x - r} 206`;
+const SEDAN = `M32 206 L32 170 Q32 156 46 153 L98 146 L140 110 Q150 100 166 99 L252 99 Q268 99 280 109 L318 142 L364 150 Q382 154 384 172 L384 206 ${arch(300, 36)} ${arch(100, 36)} Z`;
+const sedanBody = color => p(SEDAN, col('r', color)) +
+  sh('M48 159 L364 159 Q376 161 380 168 L44 168 Q44 162 48 159 Z') + shd('M136 192 L264 192 L264 206 L136 206 Z') +
+  p('M207 104 L207 200 M140 150 Q136 172 140 196', 'l thin') + rc(176, 156, 14, 4, 2, 'k') + rc(264, 156, 14, 4, 2, 'k');
+const SEDAN_WIN = p('M106 146 L146 113 Q152 107 162 107 L202 107 L202 146 Z', col('r', GLASS)) + p('M212 107 L250 107 Q262 107 270 115 L304 146 L212 146 Z', col('r', GLASS));
+const SEDAN_BUMP = p('M354 190 L386 190 L386 206 L348 206 Q348 196 354 190 Z', col('r', DARK)) + p('M30 190 L58 190 Q64 196 64 206 L30 206 Z', col('r', DARK));
+const SEDAN_LIGHTS = p('M362 156 L382 162 L382 174 L358 170 Z', col('r', LAMP)) + p('M32 160 L48 157 L48 176 L32 176 Z', col('r', REDL));
 
-// Builder vehicles: drawn in a 400×260 box standing on y≈234; parts are listed back to front.
+// Builder vehicles: side view, front on the right, standing on y≈234; parts listed back to front.
 const VEHICLES = [
   { id: 'car', name: 'Osobní auto', e: '🚗', parts: [
-    ['Karoserie', p(CAR, col('r', '#E53935')) + p('M210 138 L210 196 M140 152 L154 152 M262 152 L276 152', 'l')],
-    ['Okna', CAR_WIN],
-    ['Světla', e(362, 160, 8, 11, col('r', '#FFE082')) + rc(40, 150, 10, 20, 3, col('r', '#B71C1C'))],
-    ['Kolo', wheel(110, 205)], ['Kolo', wheel(300, 205)]] },
+    ['Karoserie', sedanBody('#E53935')], ['Okna', SEDAN_WIN], ['Světla', SEDAN_LIGHTS], ['Nárazníky', SEDAN_BUMP],
+    ['Zrcátko', p('M292 128 L310 125 L312 138 L297 140 Z', col('r', '#C62828'))],
+    ['Kolo', wheel(100, 204)], ['Kolo', wheel(300, 204)]] },
   { id: 'race', name: 'Závodní auto', e: '🏎️', parts: [
-    ['Spoiler', p('M22 136 L80 136 L80 150 L60 150 L52 178 L38 178 L46 150 L22 150 Z', col('r', '#263238'))],
-    ['Karoserie', p('M28 202 L36 176 L150 164 L186 134 L246 134 L276 162 L358 170 Q378 174 378 202 Z', col('r', '#FF7A1A'))],
-    ['Pruh', p('M150 176 L356 182 L358 192 L150 188 Z', col('r', '#FFFFFF'))],
-    ['Pilot', c(218, 128, 20, col('r', '#FFD600')) + p('M204 124 L236 124 L236 134 L204 134 Z', col('r', '#263238'))],
-    ['Číslo', c(110, 186, 16, col('r', '#FFFFFF')) + txt(110, 194, '7', 24)],
-    ['Kolo', wheel(96, 205, 30)], ['Kolo', wheel(312, 205, 30)]] },
+    ['Zadní křídlo', p('M26 116 L90 116 L90 130 L70 130 L64 172 L52 172 L56 130 L26 130 Z', col('r', DARK))],
+    ['Karoserie', p('M40 198 L42 180 Q44 172 60 170 L128 166 L162 148 Q170 142 184 142 L214 142 Q226 142 234 150 L252 166 L346 172 Q376 176 388 190 L388 198 Z', col('r', '#FF6A13')) +
+      sh('M130 168 L340 176 L344 182 L128 176 Z') + shd('M44 190 L386 192 L388 198 L40 198 Z')],
+    ['Přední křídlo', p('M330 198 L394 196 L394 208 L324 210 Z', col('r', DARK))],
+    ['Helma', c(198, 136, 15, col('r', '#FFD600')) + p('M190 130 L212 130 L212 138 L190 138 Z', col('r', '#263238'))],
+    ['Číslo', c(118, 182, 12, col('r', '#FFFFFF')) + txt(118, 188, '7', 17)],
+    ['Zadní kolo', wheel(98, 204, 32)], ['Přední kolo', wheel(318, 208, 26)]] },
   { id: 'fire', name: 'Hasiči', e: '🚒', parts: [
-    ['Nástavba', rc(30, 112, 258, 88, 8, col('r', '#D32F2F')) + p('M100 120 L100 194 M170 120 L170 194 M240 120 L240 194', 'l')],
-    ['Kabina', p('M290 200 L290 110 Q290 98 302 98 L340 98 Q352 98 360 112 L378 150 L378 200 Z', col('r', '#E53935'))],
-    ['Okno', p('M304 110 L338 110 L356 146 L304 146 Z', col('r', GLASS))],
-    ['Žebřík', rc(40, 88, 236, 16, 4, col('r', '#CFD8DC')) + p(Array.from({ length: 9 }, (_, i) => `M${64 + i * 25} 88 L${64 + i * 25} 104`).join(' ') + ' M70 104 L70 112 M250 104 L250 112', 'l')],
-    ['Maják', rc(306, 82, 30, 16, 6, col('r', '#2979FF'))],
-    ['Kolo', wheel(88, 205)], ['Kolo', wheel(200, 205)], ['Kolo', wheel(330, 205)]] },
+    ['Nástavba', p(`M26 206 L26 112 Q26 104 34 104 L282 104 L282 206 ${arch(218, 33)} ${arch(118, 33)} Z`, col('r', '#D32F2F')) +
+      sh('M28 108 L280 108 L280 115 L28 115 Z', .35) + p('M38 120 H272 V164 H38 Z M116 120 V164 M194 120 V164', 'l thin')],
+    ['Kabina', p(`M284 206 L284 106 Q284 94 296 94 L340 94 Q352 94 358 104 L382 150 Q386 158 386 168 L386 206 ${arch(334, 33)} Z`, col('r', '#E53935')) +
+      sh('M288 156 L384 156 L385 163 L288 163 Z') + p('M374 168 L386 168 L386 180 L372 180 Z', col('r', LAMP))],
+    ['Okno', p('M298 106 L338 106 Q346 106 350 114 L370 150 L298 150 Z', col('r', GLASS))],
+    ['Žebřík', rc(34, 86, 240, 12, 3, col('r', '#CFD8DC')) + p(Array.from({ length: 10 }, (_, i) => `M${54 + i * 22} 86 V98`).join(' ') + ' M60 98 V104 M250 98 V104', 'l thin')],
+    ['Maják', rc(296, 84, 40, 10, 4, col('r', '#2979FF'))],
+    ['Kolo', wheel(118, 204, 28)], ['Kolo', wheel(218, 204, 28)], ['Kolo', wheel(334, 204, 28)]] },
   { id: 'police', name: 'Policie', e: '🚓', parts: [
-    ['Karoserie', p(CAR, col('r', '#FFFFFF')) + p('M210 138 L210 196', 'l')],
-    ['Pruh', rc(42, 166, 328, 16, 0, col('r', '#1E63D6'))],
-    ['Okna', CAR_WIN],
-    ['Maják', rc(198, 72, 26, 16, 6, col('r', '#E53935')) + rc(224, 72, 26, 16, 6, col('r', '#1E63D6'))],
-    ['Kolo', wheel(110, 205)], ['Kolo', wheel(300, 205)]] },
+    ['Karoserie', sedanBody('#FFFFFF')],
+    ['Pruh', p('M42 158 L376 158 L380 168 L40 168 Z', col('r', '#1E63D6')) + txt(214, 166, 'POLICIE', 9, 'hl')],
+    ['Okna', SEDAN_WIN],
+    ['Maják', rc(184, 89, 28, 10, 4, col('r', '#E53935')) + rc(212, 89, 28, 10, 4, col('r', '#1E63D6'))],
+    ['Nárazníky', SEDAN_BUMP],
+    ['Kolo', wheel(100, 204)], ['Kolo', wheel(300, 204)]] },
   { id: 'ambulance', name: 'Sanitka', e: '🚑', parts: [
-    ['Karoserie', p('M36 200 L36 96 Q36 84 48 84 L276 84 Q292 84 300 96 L336 140 L362 146 Q376 150 376 168 L376 200 Z', col('r', '#FFFFFF'))],
-    ['Pruh', rc(38, 168, 336, 12, 0, col('r', '#E53935'))],
-    ['Kříž', p('M130 104 h24 v22 h22 v24 h-22 v22 h-24 v-22 h-22 v-24 h22 Z', col('r', '#E53935'))],
-    ['Okna', p('M284 100 L298 100 L328 140 L284 140 Z', col('r', GLASS)) + rc(214, 100, 56, 40, 6, col('r', GLASS))],
-    ['Maják', rc(150, 70, 40, 14, 6, col('r', '#2979FF'))],
-    ['Kolo', wheel(100, 205)], ['Kolo', wheel(300, 205)]] },
+    ['Karoserie', p(`M30 206 L30 92 Q30 80 42 80 L276 80 Q290 80 298 90 L342 138 L368 146 Q384 152 384 170 L384 206 ${arch(300, 36)} ${arch(100, 36)} Z`, col('r', '#FFFFFF')) +
+      shd('M136 192 L264 192 L264 206 L136 206 Z') + p('M206 84 L206 200', 'l thin')],
+    ['Okna', p('M288 94 L298 94 L336 138 L288 138 Z', col('r', GLASS)) + rc(214, 94, 64, 40, 5, col('r', GLASS))],
+    ['Pruh', p('M32 156 L376 156 L381 166 L32 166 Z', col('r', '#E53935'))],
+    ['Kříž', p('M130 100 h22 v20 h20 v22 h-20 v20 h-22 v-20 h-20 v-22 h20 Z', col('r', '#E53935'))],
+    ['Maják', rc(148, 70, 44, 10, 4, col('r', '#2979FF'))],
+    ['Světla', p('M368 172 L384 174 L384 186 L366 184 Z', col('r', LAMP)) + rc(30, 96, 8, 24, 2, col('r', REDL))],
+    ['Kolo', wheel(100, 204)], ['Kolo', wheel(300, 204)]] },
   { id: 'bus', name: 'Autobus', e: '🚌', parts: [
-    ['Karoserie', rc(24, 78, 352, 122, 18, col('r', '#FFC400')) + p('M24 172 L376 172', 'l')],
-    ['Okna', [40, 100, 160, 220].map(x => rc(x, 94, 50, 42, 6, col('r', GLASS))).join('') + rc(332, 94, 34, 62, 6, col('r', GLASS))],
-    ['Dveře', rc(282, 94, 42, 100, 6, col('r', '#90A4AE')) + p('M303 94 L303 194', 'l')],
-    ['Světla', c(362, 182, 8, col('r', '#FFF59D')) + rc(26, 156, 8, 20, 2, col('r', '#E53935'))],
-    ['Kolo', wheel(90, 205)], ['Kolo', wheel(310, 205)]] },
+    ['Karoserie', p(`M22 206 L22 88 Q22 74 36 74 L360 74 Q380 74 382 92 L386 206 ${arch(314, 34)} ${arch(94, 34)} Z`, col('r', '#FFC400')) +
+      sh('M24 80 L380 80 L381 87 L23 87 Z', .4) + shd('M22 170 L386 170 L386 178 L22 178 Z')],
+    ['Okna', [34, 86, 138, 190, 242].map(x => rc(x, 90, 46, 40, 5, col('r', GLASS))).join('') + p('M338 88 L370 88 Q378 88 378 98 L380 152 L338 152 Z', col('r', GLASS))],
+    ['Dveře', rc(290, 90, 40, 110, 4, col('r', '#B0BEC5')) + p('M310 90 L310 200', 'l thin')],
+    ['Světla', rc(372, 166, 12, 12, 3, col('r', LAMP)) + rc(22, 160, 8, 18, 2, col('r', REDL))],
+    ['Kolo', wheel(94, 204)], ['Kolo', wheel(314, 204)]] },
   { id: 'truck', name: 'Náklaďák', e: '🚚', parts: [
-    ['Kontejner', rc(24, 66, 240, 134, 8, col('r', '#FF7A1A')) + p('M84 74 L84 192 M144 74 L144 192 M204 74 L204 192', 'l')],
-    ['Kabina', p('M270 200 L270 104 Q270 92 282 92 L330 92 Q344 92 352 106 L376 150 L376 200 Z', col('r', '#1E88E5'))],
-    ['Okno', p('M284 104 L328 104 L352 146 L284 146 Z', col('r', GLASS))],
-    ['Kolo', wheel(76, 205)], ['Kolo', wheel(160, 205)], ['Kolo', wheel(322, 205)]] },
+    ['Kontejner', rc(22, 62, 250, 126, 6, col('r', '#FF7A1A')) + sh('M24 66 L270 66 L270 73 L24 73 Z', .35) + p('M72 68 V184 M122 68 V184 M172 68 V184 M222 68 V184', 'l thin')],
+    ['Podvozek', rc(22, 188, 270, 14, 3, col('r', DARK))],
+    ['Kabina', p(`M278 206 L278 98 Q278 86 290 86 L330 86 Q344 86 350 98 L380 148 Q386 156 386 168 L386 206 ${arch(330, 33)} Z`, col('r', '#1E88E5')) +
+      sh('M282 154 L384 154 L385 161 L282 161 Z') + p('M374 168 L386 168 L386 180 L372 180 Z', col('r', LAMP))],
+    ['Okno', p('M292 98 L328 98 Q336 98 340 106 L364 146 L292 146 Z', col('r', GLASS))],
+    ['Kolo', wheel(80, 204, 28)], ['Kolo', wheel(144, 204, 28)], ['Kolo', wheel(330, 204, 28)]] },
   { id: 'digger', name: 'Bagr', e: '🏗️', parts: [
-    ['Pásy', p('M40 200 Q40 176 64 176 L236 176 Q260 176 260 200 Q260 224 236 224 L64 224 Q40 224 40 200 Z', col('r', '#37474F')) + [70, 120, 170, 220].map(x => c(x, 200, 13, col('r', '#90A4AE'))).join('')],
-    ['Tělo', rc(56, 132, 176, 44, 8, col('r', '#FFC400'))],
-    ['Kabina', p('M140 132 L140 72 Q140 62 150 62 L204 62 Q214 62 218 72 L230 132 Z', col('r', '#FFB300')) + p('M152 76 L200 76 L210 114 L152 114 Z', col('r', GLASS))],
-    ['Rameno', p('M222 120 L298 58 L316 74 L242 136 Z', col('r', '#FFC400')) + p('M298 58 L352 108 L338 122 L290 78 Z', col('r', '#FFC400'))],
-    ['Lžíce', p('M330 110 L374 118 L368 162 Q348 172 330 150 Z', col('r', '#607D8B')) + p('M346 166 L344 176 M358 164 L358 174', 'l')]] },
+    ['Pásy', p('M36 204 Q36 180 60 180 L226 180 Q250 180 250 204 Q250 228 226 228 L60 228 Q36 228 36 204 Z', col('r', '#37474F')) + [62, 104, 146, 188, 226].map(x => c(x, 204, 11, col('r', '#78909C'))).join('')],
+    ['Tělo', p('M48 178 L48 144 Q48 134 58 134 L236 134 Q246 134 246 144 L246 178 Z', col('r', '#FFC400')) + sh('M50 138 L244 138 L244 145 L50 145 Z', .35) + shd('M48 164 L110 164 L110 178 L48 178 Z')],
+    ['Kabina', p('M150 134 L150 70 Q150 60 160 60 L210 60 Q222 60 226 72 L238 134 Z', col('r', '#FFB300'))],
+    ['Okno', p('M162 72 L208 72 Q214 72 216 78 L226 118 L162 118 Z', col('r', GLASS))],
+    ['Rameno', p('M226 128 L296 62 Q302 56 310 62 L318 70 L246 142 Z', col('r', '#FFC400')) + p('M306 60 L352 112 L340 124 L296 72 Z', col('r', '#FFB300'))],
+    ['Lžíce', p('M334 114 L376 120 L372 162 Q352 174 332 152 Z', col('r', '#607D8B')) + p('M348 168 L346 178 M360 166 L360 176', 'l thin')]] },
   { id: 'tractor', name: 'Traktor', e: '🚜', parts: [
-    ['Kabina', p('M60 196 L60 70 Q60 58 72 58 L160 58 Q172 58 172 70 L172 196 Z', col('r', '#43A047'))],
-    ['Okno', rc(76, 74, 80, 62, 6, col('r', GLASS))],
-    ['Kapota', p('M172 196 L172 128 L330 128 Q352 128 354 150 L358 196 Z', col('r', '#43A047'))],
-    ['Výfuk', rc(292, 84, 12, 46, 4, col('r', '#546E7A'))],
-    ['Velké kolo', wheel(110, 188, 46)],
-    ['Malé kolo', wheel(310, 208, 26)]] },
+    ['Kabina', p('M58 196 L58 64 Q58 54 68 54 L162 54 Q172 54 172 64 L172 196 Z', col('r', '#2E7D32'))],
+    ['Okno', rc(72, 68, 86, 64, 5, col('r', GLASS))],
+    ['Kapota', p('M172 196 L172 126 L316 126 Q344 126 348 150 L352 196 Z', col('r', '#43A047')) + sh('M174 130 L318 130 Q336 131 340 138 L174 138 Z') + p('M334 142 V190 M341 146 V190', 'l thin')],
+    ['Výfuk', rc(292, 80, 10, 48, 3, col('r', '#546E7A')) + rc(288, 74, 18, 8, 2, col('r', DARK))],
+    ['Velké kolo', wheel(108, 188, 46)],
+    ['Blatník', p('M50 152 Q58 126 108 126 Q158 126 168 152 L168 160 L50 160 Z', col('r', '#388E3C'))],
+    ['Malé kolo', wheel(318, 208, 26)],
+    ['Světlo', c(348, 138, 8, col('r', LAMP))]] },
   { id: 'moto', name: 'Motorka', e: '🏍️', parts: [
-    ['Výfuk', p('M104 194 L222 194 L226 208 L100 208 Z', col('r', '#B0BEC5'))],
-    ['Rám', p('M110 172 L172 130 L252 130 L292 170 L232 192 L150 192 Z', col('r', '#E53935'))],
-    ['Sedlo', p('M150 128 Q150 114 166 114 L226 114 Q242 114 240 128 Z', col('r', '#263238'))],
-    ['Řídítka', p('M280 152 L300 96 L312 100 L294 154 Z', col('r', '#90A4AE')) + p('M290 94 L326 86 L328 98 L294 106 Z', col('r', '#263238'))],
-    ['Světlo', c(320, 132, 12, col('r', '#FFEE58'))],
-    ['Kolo', wheel(110, 200, 34)], ['Kolo', wheel(304, 200, 34)]] },
+    ['Výfuk', p('M120 190 L226 186 L230 198 L118 202 Z', col('r', CHROME))],
+    ['Kapotáž', p('M112 176 L150 142 L218 138 L262 118 L300 124 L316 156 L276 178 L210 190 L150 190 Z', col('r', '#E53935')) + sh('M154 146 L216 142 L262 124 L292 128 L296 136 L220 150 L156 154 Z')],
+    ['Sedlo', p('M140 140 Q146 128 160 128 L214 128 Q222 128 220 136 L214 142 L148 146 Z', col('r', '#263238'))],
+    ['Vidlice', p('M300 140 L308 140 L310 204 L302 204 Z', col('r', CHROME))],
+    ['Řídítka', p('M288 124 L300 92 L310 96 L300 128 Z', col('r', CHROME)) + p('M294 90 L322 84 L324 94 L298 100 Z', col('r', '#263238'))],
+    ['Světlo', p('M300 128 L318 132 L316 146 L302 142 Z', col('r', LAMP))],
+    ['Kolo', wheel(108, 200, 34)], ['Kolo', wheel(304, 200, 34)]] },
   { id: 'train', name: 'Lokomotiva', e: '🚂', parts: [
-    ['Kabina', p('M30 180 L30 80 Q30 70 40 70 L132 70 Q142 70 142 80 L142 180 Z', col('r', '#1E88E5')) + rc(22, 62, 128, 14, 5, col('r', '#1565C0'))],
-    ['Okno', rc(50, 90, 72, 44, 6, col('r', GLASS))],
-    ['Kotel', p('M140 112 L328 112 Q352 112 352 146 Q352 180 328 180 L140 180 Z', col('r', '#E53935'))],
-    ['Komín', p('M270 112 L266 66 L302 66 L298 112 Z', col('r', '#37474F')) + rc(258, 56, 52, 12, 4, col('r', '#263238'))],
-    ['Rám', rc(24, 178, 334, 14, 4, col('r', '#37474F')) + p('M352 178 L382 214 L338 214 Z', col('r', '#FFC400'))],
-    ['Kolo', wheel(84, 210, 24)], ['Kolo', wheel(184, 210, 24)], ['Kolo', wheel(284, 210, 24)]] }
+    ['Kabina', p('M28 180 L28 82 Q28 72 38 72 L130 72 Q140 72 140 82 L140 180 Z', col('r', '#1E88E5')) + rc(20, 62, 128, 12, 4, col('r', '#1565C0'))],
+    ['Okno', rc(48, 90, 74, 44, 6, col('r', GLASS))],
+    ['Kotel', p('M138 112 L328 112 Q352 112 352 146 Q352 180 328 180 L138 180 Z', col('r', '#E53935')) + sh('M140 116 L328 116 Q344 117 348 126 L140 126 Z') + p('M200 112 V180 M262 112 V180', 'l thin')],
+    ['Komín', p('M272 112 L268 70 L300 70 L296 112 Z', col('r', DARK)) + rc(260, 60, 48, 12, 4, col('r', '#263238'))],
+    ['Rám', rc(22, 178, 336, 14, 4, col('r', DARK)) + p('M352 178 L384 214 L336 214 Z', col('r', '#FFC400'))],
+    ['Kolo', wheel(82, 210, 24)], ['Kolo', wheel(180, 210, 24)], ['Kolo', wheel(278, 210, 24)]] }
 ].map(v => ({ ...v, parts: v.parts.map(([n, s]) => ({ n, s })) }));
 
 const road = () => p('M0 318 H400 V400 H0 Z') + p('M20 360 H64 M112 360 H156 M204 360 H248 M296 360 H340', 'l');
@@ -684,6 +712,10 @@ const GLITTERS = [
 const RAINBOW = ['#FF6B6B', '#FFA94D', '#FFE066', '#8CE99A', '#74C0FC', '#B197FC', '#F783AC'];
 function glitterDefs() {
   let s = '<linearGradient id="g-rainbow" x1="0" y1="0" x2="1" y2="1">' + RAINBOW.map((c, i) => `<stop offset="${(i / (RAINBOW.length - 1)).toFixed(2)}" stop-color="${c}"/>`).join('') + '</linearGradient>';
+  s += '<radialGradient id="gTire" cx=".5" cy=".45" r=".6"><stop offset=".55" stop-color="#4A515B"/><stop offset="1" stop-color="#1A1D22"/></radialGradient>' +
+    '<linearGradient id="gRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F7F9FC"/><stop offset="1" stop-color="#98A3B1"/></linearGradient>' +
+    '<linearGradient id="gGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E4F4FF"/><stop offset=".6" stop-color="#A9D4F5"/><stop offset="1" stop-color="#7DB3E3"/></linearGradient>' +
+    '<linearGradient id="gWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6F9FC"/><stop offset="1" stop-color="#DDE6F0"/></linearGradient>';
   s += '<pattern id="g-check" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#fff"/><rect width="12" height="12" fill="#1B2433"/><rect x="12" y="12" width="12" height="12" fill="#1B2433"/></pattern>';
   GLITTERS.slice(2).forEach(([id, , a, b]) => {
     s += `<pattern id="${id}" width="26" height="26" patternUnits="userSpaceOnUse"><rect width="26" height="26" fill="${a}"/>` +
@@ -722,10 +754,10 @@ function renderHome() {
 function drawHomeArt() {
   const race = VEHICLES.find(v => v.id === 'race');
   const loose = race.parts.slice(0, -1).map(pt => pt.s).join('');
-  $('#artPuzzle').innerHTML = `<svg viewBox="0 0 400 260"><rect width="400" height="260" fill="#2F6FD6"/>` +
+  $('#artPuzzle').innerHTML = `<svg class="bd" viewBox="0 0 400 260"><rect width="400" height="260" fill="url(#gWall)"/>` +
     `<g class="ghost">${race.parts.map(pt => pt.s).join('')}</g><g class="colored">${loose}</g>` +
-    `<g class="colored" transform="translate(40 -40) rotate(-12 312 205)">${race.parts[race.parts.length - 1].s}</g></svg>`;
-  $('#artPuzzle').querySelectorAll('.colored [data-c]').forEach(el => { el.style.fill = el.dataset.c; });
+    `<g class="colored" transform="translate(30 -46) rotate(-14 318 208)">${race.parts[race.parts.length - 1].s}</g></svg>`;
+  $('#artPuzzle').querySelectorAll('[data-c]').forEach(el => { el.style.fill = el.dataset.c; });
   const holder = $('#artColor');
   holder.innerHTML = pageSvg(PAGES.find(pg => pg.id === 'v-fire'));
   const svg = holder.querySelector('svg');
@@ -756,12 +788,13 @@ function openBuilder(v) {
   $('#pzTitle').textContent = v.name;
   show('puzzle');
   const svg = $('#bdSvg');
-  svg.innerHTML = `<defs><pattern id="bpGrid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="1"/></pattern>` +
-    `<pattern id="wood" width="400" height="26" patternUnits="userSpaceOnUse"><path d="M0 13 H400" stroke="rgba(90,50,10,.12)" stroke-width="2"/></pattern></defs>` +
-    `<rect x="4" y="4" width="392" height="248" rx="22" fill="#2F6FD6"/><rect x="4" y="4" width="392" height="248" rx="22" fill="url(#bpGrid)"/>` +
-    `<path d="M24 236 H376" stroke="rgba(255,255,255,.35)" stroke-width="3" stroke-dasharray="14 10"/>` +
-    `<rect x="4" y="262" width="392" height="274" rx="22" fill="#DDA465"/><rect x="4" y="262" width="392" height="274" rx="22" fill="url(#wood)"/>` +
-    `<g class="ghost">${v.parts.map(pt => pt.s).join('')}</g><g id="bdPlaced"></g><g id="bdLoose"></g>`;
+  svg.setAttribute('class', 'bd');
+  svg.innerHTML = `<defs><pattern id="wood" width="400" height="26" patternUnits="userSpaceOnUse"><path d="M0 13 H400" stroke="rgba(90,50,10,.1)" stroke-width="2"/></pattern></defs>` +
+    `<rect x="4" y="4" width="392" height="248" rx="22" fill="url(#gWall)"/>` +
+    `<path d="M4 232 H396 V230 Q396 252 374 252 H26 Q4 252 4 230 Z" fill="#CBD5E0"/><path d="M22 242 H378" stroke="#B2BECB" stroke-width="2" stroke-dasharray="18 12"/>` +
+    `<rect x="4" y="262" width="392" height="274" rx="22" fill="#D9A56B"/><rect x="4" y="262" width="392" height="274" rx="22" fill="url(#wood)"/>` +
+    `<g id="bdSlots"></g><g class="ghost">${v.parts.map(pt => pt.s).join('')}</g><g id="bdPlaced"></g><g id="bdLoose"></g>`;
+  svg.querySelectorAll('.ghost [data-c]').forEach(el => { el.style.fill = el.dataset.c; });
   const loose = svg.querySelector('#bdLoose');
   B.parts = v.parts.map((pt, i) => {
     const g = document.createElementNS(SVGNS, 'g');
@@ -773,10 +806,10 @@ function openBuilder(v) {
     const bb = g.getBBox();
     const part = { i, n: pt.n, g, cx: bb.x + bb.width / 2, cy: bb.y + bb.height / 2, w: bb.width, h: bb.height, dx: 0, dy: 0, s: 1, placed: false };
     part.key = `${pt.n}|${Math.round(bb.width)}x${Math.round(bb.height)}`;
-    // invisible, generous grab area so thin parts (ladder, exhaust) are easy to catch with a finger
-    const hw = Math.max(bb.width + 24, 90), hh = Math.max(bb.height + 24, 90);
-    g.insertAdjacentHTML('afterbegin', `<rect class="hit" x="${part.cx - hw / 2}" y="${part.cy - hh / 2}" width="${hw}" height="${hh}" fill="transparent" pointer-events="all"/>`);
     (B.slots[part.key] = B.slots[part.key] || []).push({ x: part.cx, y: part.cy });
+    // invisible grab area the size of the part's workbench card
+    g.insertAdjacentHTML('afterbegin', '<rect class="hit" fill="transparent" pointer-events="all"/>');
+    part.hit = g.firstChild;
     return part;
   });
   layoutTray();
@@ -787,22 +820,35 @@ function setT(p) {
   p.g.style.transformOrigin = `${p.cx}px ${p.cy}px`;
   p.g.style.transform = `translate(${p.dx}px, ${p.dy}px) scale(${p.s})`;
 }
+// every part sits on an equal card on the workbench, scaled to the same size
 function layoutTray() {
   const loose = B.parts.filter(p => !p.placed).sort(() => Math.random() - .5), n = loose.length;
-  if (!n) return;
-  const cols = n <= 3 ? n : n <= 6 ? 3 : 4, rows = Math.ceil(n / cols);
-  const W = 380 / cols, H = 262 / rows;
+  const cols = Math.min(4, n), rows = Math.ceil(n / cols);
+  const W = 380 / cols, H = Math.min(262 / rows, 128), card = Math.min(W, H) - 12;
+  const y0 = 268 + (262 - H * rows) / 2;
+  let cards = '';
   loose.forEach((p, k) => {
-    const sx = 10 + W * (k % cols + .5), sy = 268 + H * (Math.floor(k / cols) + .5);
-    p.ts = Math.min(1, W * .86 / p.w, H * .8 / p.h);
+    const sx = 10 + W * (k % cols + .5), sy = y0 + H * (Math.floor(k / cols) + .5);
+    cards += `<rect x="${sx - card / 2}" y="${sy - card / 2}" width="${card}" height="${card}" rx="16" fill="rgba(255,255,255,.5)"/>`;
+    p.ts = Math.min(card * .78 / p.w, card * .78 / p.h);
     p.tx = sx - p.cx; p.ty = sy - p.cy;
     p.dx = p.tx; p.dy = p.ty; p.s = p.ts; setT(p);
+    const hs = card / p.ts;
+    p.hit.setAttribute('x', p.cx - hs / 2); p.hit.setAttribute('y', p.cy - hs / 2);
+    p.hit.setAttribute('width', hs); p.hit.setAttribute('height', hs);
   });
+  $('#bdSlots').innerHTML = cards;
 }
 function svgPt(ev) {
   const svg = $('#bdSvg'), pt = svg.createSVGPoint();
   pt.x = ev.clientX; pt.y = ev.clientY;
   return pt.matrixTransform(svg.getScreenCTM().inverse());
+}
+function nearSlot(p, x, y) {
+  const free = B.slots[p.key];
+  let best = -1, bd = 62;
+  free.forEach((sl, k) => { const d = Math.hypot(sl.x - x, sl.y - y); if (d < bd) { bd = d; best = k; } });
+  return best;
 }
 $('#bdSvg').addEventListener('pointerdown', ev => {
   if (!B || B.done || B.drag) return;
@@ -810,11 +856,8 @@ $('#bdSvg').addEventListener('pointerdown', ev => {
   const p = B.parts[+g.dataset.i]; if (p.placed) return;
   ev.preventDefault();
   const q = svgPt(ev);
-  // the part grows to full size around its centre; keep the grabbed spot under the finger
-  const relX = (q.x - (p.cx + p.dx)) / p.s, relY = (q.y - (p.cy + p.dy)) / p.s;
-  B.drag = { p, id: ev.pointerId, relX, relY };
-  p.s = 1; p.dx = q.x - relX - p.cx; p.dy = q.y - relY - p.cy;
-  g.classList.remove('anim'); g.classList.add('lift'); $('#bdLoose').appendChild(g); setT(p);
+  B.drag = { p, id: ev.pointerId, offX: p.cx + p.dx - q.x, offY: p.cy + p.dy - q.y, near: -1, t: 0 };
+  g.classList.remove('anim'); g.classList.add('lift'); $('#bdLoose').appendChild(g);
   try { $('#bdSvg').setPointerCapture(ev.pointerId); } catch (e) {}
   sfx.pick(); say(p.n);
 });
@@ -822,20 +865,27 @@ $('#bdSvg').addEventListener('pointermove', ev => {
   const d = B && B.drag; if (!d || ev.pointerId !== d.id) return;
   ev.preventDefault();
   const q = svgPt(ev), p = d.p;
-  p.dx = Math.max(-p.cx, Math.min(400 - p.cx, q.x - d.relX - p.cx));
-  p.dy = Math.max(-p.cy, Math.min(540 - p.cy, q.y - d.relY - p.cy));
+  const x = Math.max(0, Math.min(400, q.x + d.offX)), y = Math.max(0, Math.min(540, q.y + d.offY));
+  const k = nearSlot(p, x, y);
+  if (k !== d.near) {   // entering/leaving the target: animate the grow/shrink
+    p.g.classList.add('anim'); clearTimeout(d.t); d.t = setTimeout(() => p.g.classList.remove('anim'), 240);
+    if (k >= 0 && d.near < 0) tone(620, .06, 'sine', .08);
+    d.near = k;
+  }
+  if (k >= 0) { const sl = B.slots[p.key][k]; p.s = 1; p.dx = sl.x - p.cx; p.dy = sl.y - p.cy; }
+  else { p.s = p.ts; p.dx = x - p.cx; p.dy = y - p.cy; }
   setT(p);
-  if (Math.random() < .25) sparkleAt(ev.clientX, ev.clientY, 1);
+  if (Math.random() < .2) sparkleAt(ev.clientX, ev.clientY, 1);
 });
 function endBuildDrag(ev) {
   const d = B && B.drag; if (!d || ev.pointerId !== d.id) return;
-  B.drag = null;
-  const p = d.p, x = p.cx + p.dx, y = p.cy + p.dy;
+  B.drag = null; clearTimeout(d.t);
+  const p = d.p;
   p.g.classList.remove('lift'); p.g.classList.add('anim');
-  const free = B.slots[p.key], k = free.findIndex(sl => Math.hypot(sl.x - x, sl.y - y) < 28);
-  if (k >= 0) {
-    const sl = free.splice(k, 1)[0];
+  if (d.near >= 0) {
+    const sl = B.slots[p.key].splice(d.near, 1)[0];
     p.dx = sl.x - p.cx; p.dy = sl.y - p.cy; p.s = 1; p.placed = true; setT(p);
+    p.hit.remove();
     const layer = $('#bdPlaced'), next = [...layer.children].find(ch => +ch.dataset.i > p.i);
     layer.insertBefore(p.g, next || null);
     B.placed++;
