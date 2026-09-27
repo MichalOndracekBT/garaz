@@ -773,6 +773,9 @@ function openBuilder(v) {
     const bb = g.getBBox();
     const part = { i, n: pt.n, g, cx: bb.x + bb.width / 2, cy: bb.y + bb.height / 2, w: bb.width, h: bb.height, dx: 0, dy: 0, s: 1, placed: false };
     part.key = `${pt.n}|${Math.round(bb.width)}x${Math.round(bb.height)}`;
+    // invisible, generous grab area so thin parts (ladder, exhaust) are easy to catch with a finger
+    const hw = Math.max(bb.width + 24, 90), hh = Math.max(bb.height + 24, 90);
+    g.insertAdjacentHTML('afterbegin', `<rect class="hit" x="${part.cx - hw / 2}" y="${part.cy - hh / 2}" width="${hw}" height="${hh}" fill="transparent" pointer-events="all"/>`);
     (B.slots[part.key] = B.slots[part.key] || []).push({ x: part.cx, y: part.cy });
     return part;
   });
