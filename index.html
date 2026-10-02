@@ -930,6 +930,98 @@ const SIGNS = [
     [0, 1, 2, 3].map(i => rc(134 + i * 34, 206, 22, 12, 2)).join('') + c(200, 128, 10, 'k') + p('M192 142 L208 142 L214 178 L204 178 L200 196 L196 178 L186 178 Z', 'k') }
 ];
 const PAGES = [...VEHICLES.map(v => ({ id: 'v-' + v.id, name: v.name, e: v.e, svg: onRoad(v) })), ...TRANSPORT, ...SIGNS];
+/* ---------- MORE COLORING PAGES ---------- */
+// class hack: the colour this region gets in colour-by-number mode
+const NC = col => `r" data-nc="${col}`;
+const HUB = (x, y, r) => c(x, y, r, NC('#37474F')) + c(x, y, r * .42, NC('#BDBDBD'));
+// vehicles sit in a translated group so the win screen can drive them off and back
+const drive = s => `<g transform="translate(0 0)">${s}</g>`;
+const SKY = BG + c(342, 62, 30) + cloud(36, 58);
+const EXTRA_PAGES = [
+  { id: 'x-tram', name: 'Tramvaj', e: '🚋', svg: BG + cloud(250, 30) + p('M0 64 H400', 'l') + road() + drive(
+    p('M176 120 L200 66 L224 120 M186 98 L214 98', 'l') + rc(90, 108, 220, 16, 6, NC('#BDBDBD')) +
+    rc(36, 120, 328, 162, 26, NC('#E53935')) + rc(36, 220, 328, 18, 0, NC('#FFFFFF')) +
+    [60, 124, 188].map(x => rc(x, 146, 52, 56, 8, NC('#B2EBF2'))).join('') + rc(258, 146, 52, 118, 6, NC('#B2EBF2')) + p('M284 146 L284 264', 'l') +
+    rc(320, 146, 32, 56, 8, NC('#B2EBF2')) + rc(344, 248, 12, 12, 3, NC('#FFF3A0')) +
+    HUB(104, 292, 24) + HUB(296, 292, 24)) },
+  { id: 'x-bike', name: 'Kolo', e: '🚲', svg: SKY + road() + drive(
+    c(108, 262, 54, NC('#37474F')) + c(108, 262, 44, NC('#FFFFFF')) + c(292, 262, 54, NC('#37474F')) + c(292, 262, 44, NC('#FFFFFF')) +
+    p('M108 262 L170 262 L232 176 L150 176 Z M150 176 L108 262 M170 262 L140 160 M232 176 L292 262 M232 176 L222 132', 'l') +
+    p('M120 154 Q146 142 172 154 L166 166 L126 166 Z', NC('#5D4037')) + p('M202 128 L244 124', 'l') + rc(236, 116, 26, 14, 6, NC('#37474F')) +
+    p('M250 142 L310 142 L302 186 L258 186 Z', NC('#D7B98E')) + c(268, 132, 11, NC('#EC407A')) + c(292, 128, 11, NC('#FDD835')) +
+    c(108, 262, 9, NC('#BDBDBD')) + c(292, 262, 9, NC('#BDBDBD')) + c(170, 262, 12, NC('#BDBDBD'))) },
+  { id: 'x-scooter', name: 'Koloběžka', e: '🛴', svg: SKY + road() + drive(
+    p('M296 284 L328 128 L344 132 L314 286 Z', NC('#1E88E5')) + rc(306, 116, 74, 16, 8, NC('#37474F')) +
+    rc(96, 270, 220, 22, 10, NC('#1E88E5')) + rc(116, 262, 120, 10, 5, NC('#37474F')) +
+    p('M96 280 Q78 280 72 300 L96 300 Z', NC('#E53935')) + HUB(112, 296, 22) + HUB(312, 296, 22) + rc(332, 160, 14, 10, 4, NC('#FFF3A0'))) },
+  { id: 'x-tow', name: 'Odtahovka', e: '🚚', svg: SKY + road() + drive(
+    p('M64 240 L40 156 L56 152 L84 240 Z', NC('#FDD835')) + p('M48 154 L48 200', 'l') +
+    rc(30, 240, 236, 26, 4, NC('#FDD835')) +
+    p('M70 240 L70 214 Q72 204 84 202 L108 200 L126 182 L182 182 L200 200 L224 204 Q236 206 236 218 L236 240 Z', NC('#1E88E5')) +
+    p('M118 200 L132 188 L176 188 L190 200 Z', NC('#B2EBF2')) + c(102, 240, 14, NC('#37474F')) + c(206, 240, 14, NC('#37474F')) +
+    rc(30, 264, 344, 22, 4, NC('#37474F')) +
+    p('M262 288 L262 184 Q262 172 274 172 L320 172 L360 222 L374 228 L374 288 Z', NC('#FB8C00')) + p('M278 188 L316 188 L346 222 L278 222 Z', NC('#B2EBF2')) +
+    rc(292, 156, 26, 16, 6, NC('#FFB300')) + rc(364, 238, 10, 14, 3, NC('#FFF3A0')) + HUB(92, 292, 26) + HUB(314, 292, 26)) },
+  { id: 'x-icecream', name: 'Zmrzlinářské auto', e: '🍦', svg: SKY + road() + drive(
+    p('M146 92 L194 92 L170 136 Z', NC('#D7B98E')) + c(170, 80, 24, NC('#F8BBD0')) + c(170, 52, 7, NC('#E53935')) +
+    p('M40 290 L40 150 Q40 136 54 136 L284 136 Q302 136 312 150 L362 212 Q374 224 374 238 L374 290 Z', NC('#FFFFFF')) +
+    p('M292 156 L344 216 L292 216 Z', NC('#B2EBF2')) + rc(92, 176, 148, 64, 8, NC('#FFF3A0')) +
+    p('M80 152 L252 152 L264 178 L68 178 Z', NC('#EC407A')) + p('M112 152 L106 178 M146 152 L144 178 M180 152 L182 178 M214 152 L220 178', 'l') +
+    rc(40, 250, 334, 14, 0, NC('#4FC3F7')) + rc(362, 240, 12, 12, 3, NC('#FFF3A0')) + HUB(102, 292, 26) + HUB(312, 292, 26)) },
+  { id: 'x-roller', name: 'Silniční válec', e: '🚧', svg: SKY + road() + drive(
+    rc(108, 150, 14, 52, 4, NC('#37474F')) + rc(140, 98, 112, 14, 6, NC('#FFB300')) + rc(150, 110, 92, 92, 6, NC('#FFB300')) + rc(164, 124, 64, 50, 6, NC('#B2EBF2')) +
+    p('M74 252 L74 202 L292 202 L292 252 Z', NC('#FFB300')) + p('M292 210 L336 210 L344 228 L292 228 Z', NC('#37474F')) +
+    c(320, 262, 56, NC('#78909C')) + c(320, 262, 20, NC('#BDBDBD')) + HUB(112, 280, 38)) },
+  { id: 'x-forklift', name: 'Vysokozdvižný vozík', e: '📦', svg: SKY + road() + drive(
+    p('M112 192 L122 110 L210 110 L222 192', 'l') + rc(106, 100, 124, 12, 4, NC('#37474F')) +
+    rc(56, 220, 26, 70, 6, NC('#37474F')) + p('M78 290 L78 202 Q78 192 88 192 L222 192 L242 232 L242 290 Z', NC('#FDD835')) +
+    rc(142, 160, 40, 32, 6, NC('#37474F')) + rc(250, 90, 14, 200, 3, NC('#78909C')) + rc(272, 90, 14, 200, 3, NC('#78909C')) +
+    rc(296, 196, 66, 72, 4, NC('#D7B98E')) + p('M296 214 L362 214 M329 196 L329 268', 'l') + p('M264 270 L370 270 L370 282 L264 282 Z', NC('#37474F')) +
+    HUB(112, 294, 24) + HUB(220, 294, 24)) },
+  { id: 'x-combine', name: 'Kombajn', e: '🌾', svg: SKY + p('M0 318 H400 V400 H0 Z') + p('M20 340 L28 330 M60 356 L68 346 M120 344 L128 334 M200 360 L208 350 M260 342 L268 332 M330 358 L338 348 M370 340 L378 330', 'l') + drive(
+    p('M140 172 L108 110 L122 104 L156 168 Z', NC('#43A047')) + rc(166, 136, 12, 36, 3, NC('#37474F')) +
+    rc(110, 170, 196, 112, 10, NC('#43A047')) + rc(230, 108, 74, 70, 8, NC('#43A047')) + rc(242, 118, 50, 40, 6, NC('#B2EBF2')) +
+    rc(18, 236, 102, 48, 6, NC('#FDD835')) + c(64, 232, 34, NC('#E53935')) + p('M64 198 L64 266 M30 232 L98 232 M40 208 L88 256 M88 208 L40 256', 'l') +
+    rc(130, 196, 70, 30, 4, NC('#FDD835')) + HUB(256, 284, 34) + HUB(156, 296, 22)) },
+  { id: 'x-kart', name: 'Motokára', e: '🏁', svg: SKY + road() + drive(
+    rc(62, 238, 16, 36, 3, NC('#37474F')) + rc(100, 248, 52, 24, 4, NC('#BDBDBD')) +
+    p('M60 292 L80 270 L330 270 L352 292 Z', NC('#E53935')) + p('M238 270 L328 256 L342 270 Z', NC('#E53935')) +
+    rc(166, 226, 42, 46, 8, NC('#37474F')) + p('M236 232 L262 262', 'l') + rc(228, 222, 18, 10, 4, NC('#37474F')) +
+    c(214, 206, 26, NC('#FDD835')) + p('M214 194 L240 194 Q244 206 236 214 L214 214 Z', NC('#263238')) +
+    c(286, 264, 13, NC('#FFFFFF')) + rc(332, 276, 40, 10, 4, NC('#37474F')) + HUB(104, 290, 28) + HUB(304, 294, 24)) },
+  { id: 'x-rover', name: 'Měsíční vozítko', e: '🛰️', svg: BG + star(50, 50, 12, 5) + star(180, 90, 9, 4) + star(370, 170, 10, 4) + c(320, 72, 32) +
+    p('M0 302 Q100 290 200 302 T400 298 V400 H0 Z') + e(80, 350, 32, 10, NC('#78909C')) + e(300, 362, 38, 10, NC('#78909C')) + drive(
+    p('M200 200 L200 186 M276 200 L292 132', 'l') + p('M272 128 Q292 150 314 126 Z', NC('#BDBDBD')) +
+    p('M118 158 L282 158 L302 186 L98 186 Z', NC('#1E88E5')) + p('M150 158 L140 186 M200 158 L200 186 M250 158 L260 186', 'l') +
+    rc(98, 200, 204, 52, 10, NC('#ECEFF1')) + rc(272, 208, 26, 20, 4, NC('#37474F')) + c(285, 218, 6, NC('#4FC3F7')) +
+    p('M122 252 L122 278 M200 252 L200 278 M278 252 L278 278', 'l') + HUB(122, 280, 22) + HUB(200, 280, 22) + HUB(278, 280, 22)) },
+  { id: 'x-snowcat', name: 'Rolba', e: '❄️', svg: BG + [[50, 60], [140, 40], [250, 90], [330, 40], [370, 140]].map(([x, y]) => star(x, y, 9, 3, 6)).join('') +
+    p('M0 318 H400 V400 H0 Z') + drive(
+    rc(214, 104, 26, 14, 6, NC('#FFB300')) + rc(188, 118, 92, 72, 8, NC('#E53935')) + rc(200, 128, 68, 46, 6, NC('#B2EBF2')) +
+    rc(78, 182, 206, 82, 10, NC('#E53935')) + rc(78, 230, 206, 12, 0, NC('#FFFFFF')) +
+    p('M318 216 L372 196 L382 306 L330 306 Z', NC('#FDD835')) + p('M284 236 L318 236', 'l') +
+    rc(56, 262, 264, 56, 28, NC('#37474F')) + [88, 148, 208, 288].map(x => c(x, 290, 17, NC('#BDBDBD'))).join('')) },
+  { id: 'x-sub', name: 'Ponorka', e: '🟡', svg: BG + p('M0 64 Q50 50 100 64 T200 64 T300 64 T400 64 V0 H0 Z', NC('#B2EBF2')) +
+    p('M0 352 Q100 332 200 354 T400 348 V400 H0 Z', NC('#FFE0CC')) + p('M40 352 Q30 316 46 290 M330 350 Q340 320 332 296', 'l') +
+    e(330, 116, 24, 14, NC('#FF7A45')) + p('M306 116 L290 104 L290 128 Z', NC('#FF7A45')) + c(340, 112, 3, 'k') +
+    c(90, 120, 8) + c(110, 96, 5) + c(100, 76, 4) +
+    p('M218 132 L218 92 L248 92', 'l') + rc(168, 130, 72, 52, 12, NC('#FDD835')) +
+    p('M52 222 L26 196 L26 248 Z', NC('#FB8C00')) + e(200, 222, 152, 62, NC('#FDD835')) +
+    [130, 200, 270].map(x => c(x, 222, 20, NC('#37474F')) + c(x, 222, 12, NC('#4FC3F7'))).join('') },
+  { id: 'x-balloon', name: 'Horkovzdušný balon', e: '🎈', svg: BG + cloud(20, 60) + cloud(300, 120) + cloud(40, 250) +
+    p('M0 362 Q100 332 200 356 T400 350 V400 H0 Z') + p('M70 30 q8 -8 16 0 q8 -8 16 0', 'l') +
+    p('M200 40 Q300 40 300 150 Q300 220 230 262 L170 262 Q100 220 100 150 Q100 40 200 40 Z', NC('#E53935')) +
+    p('M200 40 Q248 42 250 150 Q246 220 214 262 L186 262 Q154 220 150 150 Q152 42 200 40 Z', NC('#FDD835')) +
+    p('M200 40 Q220 44 220 150 Q218 222 204 262 L196 262 Q182 222 180 150 Q180 44 200 40 Z', NC('#1E88E5')) +
+    p('M176 264 L182 302 M224 264 L218 302', 'l') + rc(166, 296, 68, 10, 4, NC('#8D6E63')) + rc(170, 306, 60, 40, 6, NC('#D7B98E')) },
+  { id: 'x-cablecar', name: 'Lanovka', e: '🚡', svg: BG + c(60, 52, 26) +
+    p('M0 330 L120 150 L240 330 Z', NC('#78909C')) + p('M120 150 L94 190 L108 182 L120 196 L134 184 L146 190 Z', NC('#FFFFFF')) +
+    p('M150 330 L296 112 L400 270 V330 Z', NC('#A1887F')) + p('M296 112 L266 156 L282 148 L296 162 L310 150 L326 158 Z', NC('#FFFFFF')) +
+    p('M0 330 Q200 310 400 330 V400 H0 Z') + p('M0 82 L400 182', 'l') + p('M200 132 L200 152', 'l') +
+    rc(172, 148, 56, 12, 5, NC('#37474F')) + rc(148, 160, 104, 92, 16, NC('#E53935')) + rc(162, 174, 34, 36, 6, NC('#B2EBF2')) + rc(204, 174, 34, 36, 6, NC('#B2EBF2')) +
+    rc(148, 226, 104, 12, 0, NC('#FFFFFF')) }
+];
+PAGES.push(...EXTRA_PAGES);
 
 const GLITTERS = [
   ['g-flame', 'Plameny'], ['g-check', 'Šachovnice'],
@@ -1489,7 +1581,7 @@ const CL_STICKERS = [
   { k: 'balloon', name: 'Balonek', svg: p('M0 22 Q-8 34 0 42 Q6 48 0 52', 'l') + e(0, -14, 28, 34) + p('M-6 22 L6 22 L0 16 Z') }
 ];
 const CL_SCENES = [
-  { id: 'scn-road', name: 'Silnice', e: '🛣️', svg: BG + c(342, 62, 30) + cloud(36, 58) + cloud(196, 110) + p('M-10 322 Q120 220 270 322 Z') + road() },
+  { id: 'scn-road', name: 'Silnice', e: '🛣️', svg: BG + c(342, 62, 30) + cloud(36, 58) + cloud(196, 110) + p('M0 318 Q120 220 270 322 Z') + road() },
   { id: 'scn-city', name: 'Město', e: '🏙️', svg: BG + cloud(250, 34) +
     rc(18, 150, 84, 172, 4) + rc(110, 92, 72, 230, 4) + rc(190, 176, 90, 146, 4) + rc(288, 122, 94, 200, 4) +
     [[34, 170], [66, 170], [34, 214], [66, 214], [126, 112], [152, 112], [126, 156], [152, 156], [126, 200], [152, 200], [206, 196], [246, 196], [206, 240], [246, 240], [306, 142], [346, 142], [306, 190], [346, 190]]
@@ -1502,7 +1594,7 @@ const CL_SCENES = [
   { id: 'scn-space', name: 'Vesmír', e: '🪐', svg: BG + c(110, 124, 48) + e(110, 124, 80, 16, 'l', -15) + c(318, 292, 32) + c(304, 282, 7) + c(330, 304, 5) +
     star(300, 70, 14, 6) + star(220, 170, 9, 4) + star(60, 300, 12, 5) + star(180, 330, 8, 3.5) + star(360, 160, 9, 4) }
 ];
-const CL_GROUND_GRAY = /^(v-|scn-road|scn-city|scn-race)/;
+const CL_GROUND_GRAY = /^(v-|scn-road|scn-city|scn-race|x-tram|x-bike|x-scooter|x-tow|x-icecream|x-roller|x-forklift|x-kart)/;
 const CL_SIGN = { 's-stop': '#E53935', 's-yield': '#E53935', 's-noentry': '#E53935', 's-main': '#FFFFFF', 's-park': '#1E88E5', 's-kids': '#E53935', 's-light': '#37474F', 's-cross': '#1E88E5' };
 const CL_KITS = {
   plane: { main: '#ECEFF1', second: '#1E88E5', accent: '#E53935' }, heli: { main: '#FDD835', second: '#37474F', accent: '#4FC3F7' },
@@ -1535,6 +1627,10 @@ const clHorn = (when = 0) => { [0, .3].forEach(d => { tone(392, .22, 'square', .
 const clSiren = (hi, lo) => { for (let i = 0; i < 4; i++) { tone(hi, .32, 'triangle', .12, i * .7); tone(lo, .32, 'triangle', .12, i * .7 + .35); } };
 const clKind = pg => {
   const id = pg.id;
+  if (/x-tram|x-bike|x-scooter/.test(id)) return 'bell';
+  if (/x-icecream/.test(id)) return 'tune';
+  if (/x-sub/.test(id)) return 'sub';
+  if (/x-balloon|x-cablecar/.test(id)) return 'float';
   if (/fire|ambulance/.test(id)) return 'siren2';
   if (/police/.test(id)) return 'siren';
   if (/train/.test(id)) return 'train';
@@ -1544,11 +1640,11 @@ const clKind = pg => {
   if (id.startsWith('scn-')) return 'scene';
   return 'car';
 };
-const CL_WORD = { siren2: 'Hó-rú hó-rú!', siren: 'Ta-tá ta-tá!', train: 'Tú tú!', whoosh: 'Vžuuum!', boat: 'Tůůůt!', sign: 'Pozor!', scene: 'Brm brm!', car: 'Brm brm!' };
+const CL_WORD = { bell: 'Crrrn crrrn!', tune: 'Zmrzlina!', sub: 'Blub blub!', float: 'Jů, výška!', siren2: 'Hó-rú hó-rú!', siren: 'Ta-tá ta-tá!', train: 'Tú tú!', whoosh: 'Vžuuum!', boat: 'Tůůůt!', sign: 'Pozor!', scene: 'Brm brm!', car: 'Brm brm!' };
 const CL_CFG = {
   stickers: CL_STICKERS, scenes: CL_SCENES,
-  sky: pg => /rocket|space/.test(pg.id) ? '#3949AB' : '#B2EBF2',
-  ground: pg => CL_GROUND_GRAY.test(pg.id) ? '#78909C' : pg.id === 'boat' ? '#4FC3F7' : '#9CCC65',
+  sky: pg => /rocket|space|x-rover/.test(pg.id) ? '#3949AB' : pg.id === 'x-sub' ? '#4FC3F7' : '#B2EBF2',
+  ground: pg => CL_GROUND_GRAY.test(pg.id) ? '#78909C' : pg.id === 'boat' ? '#4FC3F7' : pg.id === 'x-combine' ? '#FDD835' : pg.id === 'x-snowcat' ? '#FFFFFF' : pg.id === 'x-rover' ? '#BDBDBD' : '#9CCC65',
   cloud: '#FFFFFF', maxColors: 8,
   mapColor(c) {
     if (c[0] === '#') return c;
@@ -1580,7 +1676,11 @@ const CL_CFG = {
   },
   sound(pg, first) {
     const k = clKind(pg);
-    if (k === 'siren2') { clSiren(784, 587); clVroom(.2); }
+    if (k === 'bell') { [0, .28].forEach(d => { tone(1760, .25, 'sine', .09, d); tone(2350, .2, 'sine', .05, d); }); }
+    else if (k === 'tune') { [784, 659, 784, 880, 784, 659, 523].forEach((f, i) => tone(f, .2, 'triangle', .1, i * .2)); }
+    else if (k === 'sub') { [0, .25, .5, .8].forEach((d, i) => tone(300 + i * 120, .12, 'sine', .12, d)); }
+    else if (k === 'float') { clNoise(1.6, 300, 900, .08); }
+    else if (k === 'siren2') { clSiren(784, 587); clVroom(.2); }
     else if (k === 'siren') { clSiren(880, 660); clVroom(.2); }
     else if (k === 'train') { [0, .55].forEach(d => { tone(740, .45, 'sine', .1, d); tone(932, .45, 'sine', .08, d); }); clNoise(1.4, 300, 900, .08, .2); }
     else if (k === 'whoosh') { clNoise(1.4, 200, 2400, .16); }
@@ -1774,10 +1874,11 @@ function numPlan(pg) {
     const oi = all.indexOf(el), o = info[oi];
     const x1 = Math.max(0, o.x1), x2 = Math.min(400, o.x2), y1 = Math.max(0, o.y1), y2 = Math.min(400, o.y2);
     if (x2 - x1 < 1 || y2 - y1 < 1) return { x: (x1 + x2) / 2, y: (y1 + y2) / 2, clr: 0, area: 0, box: o };
-    const step = Math.max(1.6, Math.sqrt((x2 - x1) * (y2 - y1) / 320));
+    const later = info.slice(oi + 1).filter(q => q.x2 > x1 && q.x1 < x2 && q.y2 > y1 && q.y1 < y2);
+    // thin shapes (rainbow bands, stripes) get a finer second pass
+    const sample = step => {
     const nx = Math.max(1, Math.round((x2 - x1) / step)), ny = Math.max(1, Math.round((y2 - y1) / step));
     const sx = (x2 - x1) / nx, sy = (y2 - y1) / ny;
-    const later = info.slice(oi + 1).filter(q => q.x2 > x1 && q.x1 < x2 && q.y2 > y1 && q.y1 < y2);
     const d = new Float32Array(nx * ny); let cnt = 0;
     for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
       const x = x1 + (i + .5) * sx, y = y1 + (j + .5) * sy;
@@ -1795,19 +1896,24 @@ function numPlan(pg) {
       if (d[k] && v > best) { best = v; bi = i; bj = j; }
     }
     const s = Math.min(sx, sy);
-    return { x: x1 + (bi + .5) * sx, y: y1 + (bj + .5) * sy, clr: best > 0 ? Math.max(0, (d[bj * nx + bi] - .5) * s - 2.5) : 0, area: cnt * sx * sy, box: o };
+    return { dc: best, x: x1 + (bi + .5) * sx, y: y1 + (bj + .5) * sy, clr: best > 0 ? Math.max(0, (d[bj * nx + bi] - .5) * s - 2.5) : 0, area: cnt * sx * sy, box: o };
+    };
+    const st = Math.max(1.6, Math.sqrt((x2 - x1) * (y2 - y1) / 320));
+    let r = sample(st);
+    if (r.dc < 3 && st > 4) { const r2 = sample(Math.max(2.5, st / 3)); if (r2.clr > r.clr) r = { ...r2, area: r.area || r2.area }; }
+    return r;
   });
   host.innerHTML = '';
   // target colours
   const kit = CL_CFG.kit(pg), col = new Array(regs.length), subj = [];
   regs.forEach((el, i) => {
-    const b = pts[i].box, w = b.x2 - b.x1, h = b.y2 - b.y1, tag = el.tagName.toLowerCase(), dc = el.getAttribute('data-c');
+    const b = pts[i].box, w = b.x2 - b.x1, h = b.y2 - b.y1, tag = el.tagName.toLowerCase(), dc = el.getAttribute('data-nc') || el.getAttribute('data-c');
     if (dc) col[i] = CL_CFG.mapColor(dc);
     else if (el.classList.contains('bg')) col[i] = CL_CFG.sky(pg);
     else if (b.y2 >= 395 && w >= 300 && b.y1 > 180) col[i] = CL_CFG.ground(pg);
     else if (tag === 'ellipse' && w >= 300) col[i] = '#4FC3F7';
     else if (tag === 'circle' && b.y2 < 125 && w >= 40 && w <= 80) col[i] = '#FDD835';
-    else if (tag === 'path' && b.y2 < 140 && w > 70 && w < 130 && h < 60) col[i] = CL_CFG.cloud;
+    else if (tag === 'path' && ((b.y2 < 140 && w > 70 && w < 130 && h < 60) || (w > 85 && w < 115 && h > 25 && h < 45 && !el.getAttribute('data-c')))) col[i] = CL_CFG.cloud;
     else subj.push(i);
   });
   const big = Math.max(1, ...subj.map(i => pts[i].area));
@@ -1815,15 +1921,17 @@ function numPlan(pg) {
   if (CL_CFG.tweak) CL_CFG.tweak(pg, regs, col, pts);
   // a handful of different colours at most: merge the closest plain colours
   const rgb = h => /^#[0-9a-f]{6}$/i.test(h) ? [1, 3, 5].map(k => parseInt(h.substr(k, 2), 16)) : null;
+  // sky and ground keep their colour; other colours merge into them, never the other way round
+  const keepCol = new Set(regs.map((el, i) => el.classList.contains('bg') || (pts[i].box.y2 >= 395 && pts[i].box.x2 - pts[i].box.x1 >= 300) ? col[i] : null).filter(Boolean));
   for (;;) {
-    const uniq = [...new Set(col)]; if (uniq.length <= (CL_CFG.maxColors || 7)) break;
+    const uniq = [...new Set(col)]; if (uniq.length <= (pg.maxColors || CL_CFG.maxColors || 7)) break;
     let bd = Infinity, pair = null;
     for (let a = 0; a < uniq.length; a++) for (let b = a + 1; b < uniq.length; b++) {
-      const A = rgb(uniq[a]), B = rgb(uniq[b]); if (!A || !B) continue;
+      const A = rgb(uniq[a]), B = rgb(uniq[b]); if (!A || !B || (keepCol.has(uniq[a]) && keepCol.has(uniq[b]))) continue;
       const dd = (A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2 + (A[2] - B[2]) ** 2; if (dd < bd) { bd = dd; pair = [uniq[a], uniq[b]]; }
     }
     if (!pair) break;
-    const cnt = v => col.filter(c => c === v).length, [keep, drop] = cnt(pair[0]) >= cnt(pair[1]) ? pair : [pair[1], pair[0]];
+    const cnt = v => col.filter(c => c === v).length + (keepCol.has(v) ? 1e6 : 0), [keep, drop] = cnt(pair[0]) >= cnt(pair[1]) ? pair : [pair[1], pair[0]];
     col.forEach((c, i) => { if (c === drop) col[i] = keep; });
   }
   const auto = pts.map(q => q.clr < 4.2 || q.area < 60);
