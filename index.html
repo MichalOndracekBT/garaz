@@ -324,6 +324,23 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 #bdSvg .part.lift .pin{animation:none}
 @keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
 .mascot-in{animation:boing .5s}
+#puzzle{overflow:hidden;color:#EEF5FF;background:radial-gradient(ellipse at 50% 12%,#263b53 0%,#172638 56%,#0c1420 100%)}
+#puzzle .topbar{position:relative;z-index:2;min-height:64px;padding:10px 16px}
+#puzzle .topbar .btn{width:46px;height:46px;min-width:46px;padding:0;border-radius:15px;background:#101b2bc9;color:#e6f0fb;border:1px solid #e6f3ff23;box-shadow:0 6px 18px #0002}
+#puzzle .topbar h2,.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+#puzzle .bd-stage{position:relative;padding:0 12px 14px}
+#bdSvg{max-width:720px;filter:drop-shadow(0 18px 28px #0005)}
+#puzzle .pz-progress{position:absolute;left:-10000px}
+.pz-dots{display:flex;align-items:center;justify-content:center;gap:9px;margin:auto}
+.pz-dots i{width:11px;height:11px;border-radius:50%;background:#ffffff30;box-shadow:inset 0 1px 2px #0003;transition:background .2s,box-shadow .2s}
+.pz-dots i.done{background:#62dad2;box-shadow:0 0 13px #62dad288}
+#bdSlots rect{fill:#1e3248;stroke:#e6f3ff2b;stroke-width:1.5}
+#bdSlots rect.cur{fill:#63dad222;stroke:#62dad2;stroke-width:3;filter:drop-shadow(0 0 8px #62dad277)}
+.bd .hole .r{fill:#ffffff20!important;stroke:#8dece6!important;stroke-width:4!important;stroke-dasharray:10 7!important;filter:drop-shadow(0 0 9px #62dad288)}
+#bdSvg .part{filter:drop-shadow(0 5px 8px #0008)}
+#bdSvg .part.wait{opacity:.28}
+#bdSvg .part.now .pin{filter:drop-shadow(0 0 10px #62dad2)}
+#bdSvg .part.lift{filter:drop-shadow(0 14px 18px #0009)}
 @media (prefers-reduced-motion:reduce){.hole,#bdSvg .part.now .pin{animation:none}}
 
 /* COLORING */
@@ -555,7 +572,8 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
     <div class="topbar">
       <button class="btn" data-back="pickPuzzle" aria-label="Zpět"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
       <h2 id="pzTitle"></h2>
-      <span class="pz-progress" id="pzProgress"></span>
+      <span class="pz-progress sr-only" id="pzProgress"></span>
+      <div class="pz-dots" id="pzDots" aria-hidden="true"></div>
     </div>
     <div class="bd-stage"><svg id="bdSvg" viewBox="0 0 400 540" aria-label="Stavění auta"></svg></div>
   </section>
@@ -1261,14 +1279,22 @@ function openBuilder(v) {
   const svg = $('#bdSvg');
   svg.setAttribute('class', 'bd');
   // garage: wall with tools and a blueprint, floor with a lift; workbench below
-  svg.innerHTML = `<defs><pattern id="wood" width="400" height="26" patternUnits="userSpaceOnUse"><path d="M0 13 H400" stroke="rgba(90,50,10,.1)" stroke-width="2"/></pattern>` +
-    `<pattern id="hazard" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="14" height="14" fill="#FFC400"/><rect width="7" height="14" fill="#263238"/></pattern></defs>` +
-    `<rect x="4" y="4" width="392" height="248" rx="22" fill="url(#gWall)"/>` +
-    `<g opacity=".6"><rect x="300" y="14" width="84" height="46" rx="6" fill="#4F86D9"/><path d="M308 26 H346 M308 35 H372 M308 44 H356 M308 52 H340" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="306" cy="18" r="3" fill="#FFC400"/><circle cx="378" cy="18" r="3" fill="#FFC400"/></g>` +
-    `<rect x="14" y="12" width="84" height="40" rx="6" fill="#C9D3DE" opacity=".6"/><g font-size="18"><text x="18" y="40">🔧</text><text x="44" y="40">🔨</text><text x="70" y="40">🪛</text></g>` +
-    `<path d="M4 232 H396 V230 Q396 252 374 252 H26 Q4 252 4 230 Z" fill="#CBD5E0"/>` +
-    `<rect x="44" y="235" width="312" height="10" rx="3" fill="url(#hazard)" stroke="#8A6A00" stroke-width="1"/><rect x="60" y="245" width="10" height="7" fill="#90A4AE"/><rect x="330" y="245" width="10" height="7" fill="#90A4AE"/>` +
-    `<rect x="4" y="262" width="392" height="274" rx="22" fill="#D9A56B"/><rect x="4" y="262" width="392" height="274" rx="22" fill="url(#wood)"/>` +
+  svg.innerHTML = `<defs>` +
+    `<linearGradient id="bdWall" x2="0" y2="1"><stop stop-color="#293f59"/><stop offset="1" stop-color="#1b2c40"/></linearGradient>` +
+    `<linearGradient id="bdBench" x2="0" y2="1"><stop stop-color="#1a2a3c"/><stop offset="1" stop-color="#101a28"/></linearGradient>` +
+    `<linearGradient id="bdLift" x2="0" y2="1"><stop stop-color="#426277"/><stop offset="1" stop-color="#25384b"/></linearGradient>` +
+    `<pattern id="bdGrid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#d7e9f2" stroke-opacity=".035" stroke-width="1"/></pattern>` +
+    `<pattern id="hazard" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="14" height="14" fill="#62dad2"/><rect width="7" height="14" fill="#26384b"/></pattern></defs>` +
+    `<rect x="4" y="4" width="392" height="248" rx="22" fill="url(#bdWall)" stroke="#d7e9f2" stroke-opacity=".14" stroke-width="2"/>` +
+    `<path d="M18 34H382 M18 76H382 M18 218H382" stroke="#d7e9f2" stroke-opacity=".055" stroke-width="2"/>` +
+    `<path d="M42 4V86 M358 4V86" stroke="#d7e9f2" stroke-opacity=".035" stroke-width="2"/>` +
+    `<rect x="44" y="17" width="118" height="5" rx="2.5" fill="#fff0cc" opacity=".5"/><rect x="238" y="17" width="118" height="5" rx="2.5" fill="#fff0cc" opacity=".42"/>` +
+    `<path d="M66 23L42 108M92 23L76 92M334 23L358 108M308 23L324 92" stroke="#fff0cc" stroke-opacity=".075" stroke-width="18"/>` +
+    `<g opacity=".45"><rect x="312" y="36" width="54" height="42" rx="7" fill="#152538" stroke="#d7e9f2" stroke-opacity=".3"/><path d="M321 48H357M321 57H348M321 66H354" stroke="#8da6bb" stroke-width="2" stroke-linecap="round"/><circle cx="320" cy="42" r="2.5" fill="#62dad2"/><circle cx="358" cy="42" r="2.5" fill="#ffc96a"/></g>` +
+    `<path d="M4 226H396V232Q396 252 376 252H24Q4 252 4 232Z" fill="url(#bdLift)" stroke="#e2f0f2" stroke-opacity=".18" stroke-width="2"/>` +
+    `<rect x="44" y="237" width="312" height="7" rx="3.5" fill="url(#hazard)" opacity=".75"/><path d="M60 248V252M340 248V252" stroke="#8ca4b5" stroke-width="4"/>` +
+    `<rect x="4" y="262" width="392" height="274" rx="22" fill="url(#bdBench)" stroke="#d7e9f2" stroke-opacity=".14" stroke-width="2"/><rect x="4" y="262" width="392" height="274" rx="22" fill="url(#bdGrid)"/>` +
+    `<path d="M18 274H382" stroke="#62dad2" stroke-opacity=".18" stroke-width="2"/>` +
     `<g id="bdSlots"></g><g class="ghost">${v.parts.map(pt => pt.s).join('')}</g><g id="bdPlaced"></g><g id="bdHole" class="hole"></g><g id="bdLoose"></g>` +
     `<text id="bdHand" font-size="46" opacity="0" pointer-events="none">👆</text>`;
   svg.querySelectorAll('.ghost [data-c]').forEach(el => { el.style.fill = el.dataset.c; });
@@ -1311,6 +1337,7 @@ function openBuilder(v) {
 function currentPart() { return B.parts.find(p => !p.placed); }
 function updateCurrent() {
   const cur = currentPart();
+  $('#pzDots').innerHTML = B.parts.map((_, i) => `<i class="${i < B.placed ? 'done' : ''}"></i>`).join('');
   B.parts.forEach(p => { if (!p.placed) { p.g.classList.toggle('now', !!cur && p.key === cur.key); p.g.classList.toggle('wait', !!cur && p.key !== cur.key); } });
   $('#bdSlots').querySelectorAll('rect').forEach(r => r.classList.toggle('cur', !!cur && +r.dataset.i === cur.i));
   const hole = $('#bdHole');
