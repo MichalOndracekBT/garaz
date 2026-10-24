@@ -104,7 +104,7 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 .mode-color{background:linear-gradient(145deg,#A9D6FF,#7FB2FF)}
 .mode-count{background:linear-gradient(145deg,#9BE7B5,#7ED0E8)}
 .mode-abc{background:linear-gradient(145deg,#FFC2A8,#FFD27A)}
-.mode-art{width:72px;height:72px;border-radius:18px;overflow:hidden;background:#fff;display:block;box-shadow:inset 0 0 0 4px rgba(255,255,255,.7)}
+.mode-art{width:72px;height:72px;border-radius:18px;overflow:hidden;background:#fff;display:block;container-type:inline-size;box-shadow:inset 0 0 0 4px rgba(255,255,255,.7)}
 @media (min-width:760px){.mode-art{width:100%;height:auto;aspect-ratio:1}}
 .mode-art canvas,.mode-art svg{width:100%;height:100%;display:block}
 .art-txt{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
@@ -308,7 +308,7 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 #bdPlaced.drive{transition:transform 1.3s cubic-bezier(.55,0,.85,.35)}
 #bdPlaced.spin .wheelpart .pin{animation:spin .45s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-#artPuzzle{background:#EEF3F8}
+#artPuzzle{background:#eaf4ff}
 .rt-slot{fill:rgba(255,255,255,.35);stroke:#fff;stroke-width:3;stroke-dasharray:9 7;animation:holePulse 1.3s ease-in-out infinite}
 .rt-piece{cursor:grab}
 .rt-piece.lift{filter:drop-shadow(0 8px 6px rgba(0,0,0,.35))}
@@ -324,23 +324,23 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 #bdSvg .part.lift .pin{animation:none}
 @keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
 .mascot-in{animation:boing .5s}
-#puzzle{overflow:hidden;color:#332d23;background:radial-gradient(ellipse at 50% 12%,#fffaf1 0%,#f3ecdf 56%,#e9dfcf 100%)}
+#puzzle{overflow:hidden;color:#203b58;background:radial-gradient(ellipse at 50% 12%,#fafdff 0%,#edf6ff 56%,#dfedfa 100%)}
 #puzzle .topbar{position:relative;z-index:2;min-height:64px;padding:10px 16px}
-#puzzle .topbar .btn{width:46px;height:46px;min-width:46px;padding:0;border-radius:15px;background:#fffaf1;color:#413a30;border:1px solid #c9b99e66;box-shadow:0 5px 14px #75654820}
+#puzzle .topbar .btn{width:46px;height:46px;min-width:46px;padding:0;border-radius:15px;background:#fafdff;color:#27435f;border:1px solid #b9d2e966;box-shadow:0 5px 14px #426d961e}
 #puzzle .topbar h2,.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 #puzzle .bd-stage{position:relative;padding:0 12px 14px}
-#bdSvg{max-width:720px;filter:drop-shadow(0 12px 22px #75654824)}
+#bdSvg{max-width:720px;filter:drop-shadow(0 12px 22px #426d9624)}
 #puzzle .pz-progress{position:absolute;left:-10000px}
 .pz-dots{display:flex;align-items:center;justify-content:center;gap:9px;margin:auto}
-.pz-dots i{width:11px;height:11px;border-radius:50%;background:#d6cbb9;box-shadow:inset 0 1px 2px #75654824;transition:background .2s,box-shadow .2s}
-.pz-dots i.done{background:#3ea99c;box-shadow:0 0 11px #3ea99c55}
-#bdSlots rect{fill:#f4eddf;stroke:#c9b99eaa;stroke-width:1.5}
-#bdSlots rect.cur{fill:#3ea99c1a;stroke:#348f83;stroke-width:3;filter:drop-shadow(0 0 7px #3ea99c44)}
-.bd .hole .r{fill:#3ea99c1c!important;stroke:#348f83!important;stroke-width:4!important;stroke-dasharray:10 7!important;filter:drop-shadow(0 0 7px #3ea99c44)}
-#bdSvg .part{filter:drop-shadow(0 4px 5px #725e4140)}
+.pz-dots i{width:11px;height:11px;border-radius:50%;background:#c1d7e9;box-shadow:inset 0 1px 2px #75654824;transition:background .2s,box-shadow .2s}
+.pz-dots i.done{background:#4ba6ed;box-shadow:0 0 11px #4ba6ed55}
+#bdSlots rect{fill:#edf6ff;stroke:#c1d7e9aa;stroke-width:1.5}
+#bdSlots rect.cur{fill:#4ba6ed1a;stroke:#347fc0;stroke-width:3;filter:drop-shadow(0 0 7px #4ba6ed44)}
+.bd .hole .r{fill:#4ba6ed1c!important;stroke:#347fc0!important;stroke-width:4!important;stroke-dasharray:10 7!important;filter:drop-shadow(0 0 7px #4ba6ed44)}
+#bdSvg .part{filter:drop-shadow(0 4px 5px #426d9633)}
 #bdSvg .part.wait{opacity:.28}
-#bdSvg .part.now .pin{filter:drop-shadow(0 0 8px #3ea99c77)}
-#bdSvg .part.lift{filter:drop-shadow(0 10px 14px #725e4144)}
+#bdSvg .part.now .pin{filter:drop-shadow(0 0 8px #4ba6ed77)}
+#bdSvg .part.lift{filter:drop-shadow(0 10px 14px #426d9640)}
 @media (prefers-reduced-motion:reduce){.hole,#bdSvg .part.now .pin{animation:none}}
 
 /* COLORING */
@@ -506,66 +506,71 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 }
 /* Shared light-garage visual system across the whole app. */
 :root{
-  --bg:#f2ecdf;
-  --card:#fffaf1;
-  --muted:#756b5d;
-  --shadow:rgba(91,70,42,.14);
-  --leaf:#3ea99c;
-  --sun:#edb75b;
-  --sky:#7aaec6;
+  --bg:#eaf4ff;
+  --card:#fafdff;
+  --muted:#58718b;
+  --shadow:rgba(47,91,137,.16);
+  --leaf:#4ba6ed;
+  --sun:#ffc96a;
+  --sky:#75b9f2;
   color-scheme:light;
 }
-body{color:#29251f;background:radial-gradient(ellipse at 50% 0%,#fffaf1 0%,#f6f1e8 40%,#eee6d8 100%);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{color:#1c3048;background:radial-gradient(ellipse at 50% 0%,#fbfdff 0%,#f0f7ff 40%,#e4effa 100%);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
 .scene-bg{display:none}
 .twinkles{opacity:.3}
-#home{background:radial-gradient(ellipse at 50% 16%,#fffdf8 0%,#f8f3e9 54%,#eee5d7 100%)}
-#home .home-top .stars,.btn,.install,.seg button,.tool,.sizes button,.stk-sizes button,.lg-tile,.lg-q,.lg-card,.memo-card .face,.win-card,.abc-card,.abc-key{border:1px solid #d6cbb8aa}
-#home .home-top .stars{background:linear-gradient(145deg,#fffdf8,#f5efe4);color:#29251f;box-shadow:0 5px 14px #75654820}
-#home .btn,.btn,.seg button,.tool,.sizes button,.stk-sizes button{background:linear-gradient(145deg,#fffdf8,#f1eadc);color:#413a30;box-shadow:0 4px 12px #7565481d}
-.btn.primary{background:linear-gradient(145deg,#f1b35b,#e98b4b);color:#fff;box-shadow:0 5px 0 #8d4428}
-.btn.green{background:linear-gradient(145deg,#78c9b8,#3ea99c);color:#19352f;box-shadow:0 5px 0 #287f72}
-.install{background:linear-gradient(145deg,#fffdf8,#f1eadf);color:#413a30;box-shadow:0 6px 18px #7565481d}
-.install .x{background:#eee6d8;color:#413a30}
-.topbar{background:linear-gradient(180deg,#f6f0e5dc,transparent);color:#29251f}
-.topbar h2{color:#29251f}
-.lead,.seg-label,.pz-progress,.cl-hint{color:#756b5d}
-.home-body h1 span{background:linear-gradient(100deg,#bd7040,#dbb462 48%,#c99247 86%);background-size:180% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
-.mode{border:1px solid #fffaf1d9;box-shadow:0 6px 0 #d6cbb8,inset 0 1px #fffaf1c9}
+#home{background:radial-gradient(ellipse at 50% 16%,#fcfeff 0%,#f4f9ff 54%,#e5f0fb 100%)}
+#home .home-top .stars,.btn,.install,.seg button,.tool,.sizes button,.stk-sizes button,.lg-tile,.lg-q,.lg-card,.memo-card .face,.win-card,.abc-card,.abc-key{border:1px solid #c7dcef}
+#home .home-top .stars{background:linear-gradient(145deg,#fcfeff,#f1f8ff);color:#1c3048;box-shadow:0 5px 14px #426d9621}
+#home .btn,.btn,.seg button,.tool,.sizes button,.stk-sizes button{background:linear-gradient(145deg,#fcfeff,#eaf3fc);color:#243d59;box-shadow:0 4px 12px #426d961e}
+.btn.primary{background:linear-gradient(145deg,#62b8f5,#3989db);color:#fff;box-shadow:0 5px 0 #28659e}
+.btn.green{background:linear-gradient(145deg,#86ccff,#4ba6ed);color:#153958;box-shadow:0 5px 0 #327fba}
+.install{background:linear-gradient(145deg,#fcfeff,#eaf3fc);color:#243d59;box-shadow:0 6px 18px #426d961e}
+.install .x{background:#e4effa;color:#243d59}
+.topbar{background:linear-gradient(180deg,#f0f7ffdc,transparent);color:#1c3048}
+.topbar h2{color:#1c3048}
+.lead,.seg-label,.pz-progress,.cl-hint{color:#58718b}
+.home-body h1 span{background:linear-gradient(100deg,#2679cd,#62b6f4 48%,#3988d4 86%);background-size:180% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+.mode{border:1px solid #fbfdffd9;box-shadow:0 6px 0 #c4d9ed,inset 0 1px #fbfdffc9}
 .mode::after{display:none}
-.mode-puzzle{background:linear-gradient(145deg,#fff4df,#ffe5b4);border-color:#efbd7066}
-.mode-color{background:linear-gradient(145deg,#f1f3ee,#e5ece7);border-color:#bbcbbd}
-.mode-count{background:linear-gradient(145deg,#eef2df,#e0ebd4);border-color:#a6c1a1}
-.mode-abc{background:linear-gradient(145deg,#fff0e8,#ffe0cf);border-color:#efaa8777}
-.mode-logic{background:linear-gradient(145deg,#fff5df,#ffebc2);border-color:#eac06d77}
-.mode-memo{background:linear-gradient(145deg,#e9f2e9,#dcebe2);border-color:#a5c6ae}
-.mode-name{color:#29251f}
-.mode-sub{color:#40556b;opacity:.9}
-.mode-art{background:linear-gradient(145deg,#fffdf8,#f1eadf);box-shadow:inset 0 0 0 1px #ffffff,0 4px 12px #75654820}
-.mode-art .art-txt b{color:#ff9d56}
-#app .seg button[aria-pressed="true"],.tool[aria-pressed="true"]{background:linear-gradient(145deg,#78c9b8,#3ea99c);color:#19352f;box-shadow:0 4px 0 #287f72}
+.mode-puzzle{background:linear-gradient(145deg,#e9f4ff,#d3e9ff);border-color:#9dcaf088}
+.mode-color{background:linear-gradient(145deg,#e6f3ff,#cfe7fb);border-color:#a7cdeb}
+.mode-count{background:linear-gradient(145deg,#e7f5ff,#d2ebfa);border-color:#9bcbe9}
+.mode-abc{background:linear-gradient(145deg,#e9efff,#d9e7ff);border-color:#adc6ed}
+.mode-logic{background:linear-gradient(145deg,#eaf3ff,#d2e5fb);border-color:#98bce8}
+.mode-memo{background:linear-gradient(145deg,#e3f4fb,#d0eaf5);border-color:#9ecfe2}
+.mode-name{color:#1c3048}
+.mode-sub{color:#405d79;opacity:.9}
+.mode-art{background:linear-gradient(145deg,#fcfeff,#eaf3fc);box-shadow:inset 0 0 0 1px #fbfdff,0 4px 12px #426d9621}
+.mode-art .art-txt b{color:#3488ce}
+#app .seg button[aria-pressed="true"],.tool[aria-pressed="true"]{background:linear-gradient(145deg,#86ccff,#4ba6ed);color:#153958;box-shadow:0 4px 0 #327fba}
 .seg.icons button[aria-pressed="true"]{transform:translateY(-2px)}
-.grid .tile,.lg-tile,.lg-q,.lg-card,.abc-card,.abc-key,.win-card{background:linear-gradient(145deg,#fffdf8,#f1eadf);color:#29251f;box-shadow:0 5px 14px #7565481d}
-.tile[data-i],.tile[data-dot]{border:1px solid #d8ccb9aa}
-.memo-card{background:linear-gradient(145deg,#eef1e9,#e4e8dc);border:1px solid #d0c6b5;box-shadow:0 5px 14px #75654820}
-.memo-card .face{background:linear-gradient(145deg,#fffdf8,#f1eadf);color:#29251f}
-.memo-ico i{background:linear-gradient(145deg,#60d4ca,#6b9db5);border-color:#fff}
-#memoSeg button[aria-pressed="true"] .memo-ico i{background:#d9eee6}
-.lg-mix{background:linear-gradient(135deg,#f2ebdf,#ebe6d9);border:1px solid #d3c7ad}
-.lg-field{color:#29251f}
-.lg-slot{color:#bf741e;border-color:#e5aa53}
-.overlay{background:rgba(56,44,28,.28);backdrop-filter:blur(8px)}
-.win-card{border-color:#d9cdbb;box-shadow:0 14px 32px #75654824,inset 0 1px #fff}
-#count{background:radial-gradient(ellipse at 50% 0%,#fffaf1,#f6f0e5 58%,#eee5d7)}
-#puzzle,#pickPuzzle,#pickColor,#color,#extra,#logic,#memo,#abc{color:#29251f}
-.palette .sw{box-shadow:0 3px 10px #75654824}
-.tool[aria-pressed="true"]{outline:1px solid #3ea99c}
-.sizes button[aria-pressed="true"],.stk-sizes button[aria-pressed="true"]{box-shadow:0 0 0 3px #3ea99c,0 4px 12px #75654820}
-.abc-big,.abc-word .first{color:#b9742d}
-.abc-word .blank{border-color:#3ea99c}
-.abc-key[aria-pressed="true"]{background:linear-gradient(145deg,#78c9b8,#3ea99c);color:#19352f;box-shadow:0 5px 0 #287f72}
-.lg-card.ok{background:linear-gradient(145deg,#78c9b8,#3ea99c);color:#19352f;box-shadow:0 5px 0 #287f72}
-.lg-card.hint{box-shadow:0 0 0 4px #e6b35c,0 5px 0 #b3833e}
-.memo-card.got{box-shadow:0 0 0 4px #3ea99c,0 5px 14px #75654820}
+.grid .tile,.lg-tile,.lg-q,.lg-card,.abc-card,.abc-key,.win-card{background:linear-gradient(145deg,#fcfeff,#eaf3fc);color:#1c3048;box-shadow:0 5px 14px #426d961e}
+.tile[data-i],.tile[data-dot]{border:1px solid #c4d9ed}
+.memo-card{background:linear-gradient(145deg,#e7f3fb,#d8eaf6);border:1px solid #c2d7e8;box-shadow:0 5px 14px #426d9621}
+.memo-card .face{background:linear-gradient(145deg,#fcfeff,#eaf3fc);color:#1c3048}
+.memo-ico i{background:linear-gradient(145deg,#81c7f5,#4f94d0);border-color:#fff}
+#memoSeg button[aria-pressed="true"] .memo-ico i{background:#d7edff}
+.lg-mix{background:linear-gradient(135deg,#e8f3ff,#dcecff);border:1px solid #b8cfea}
+.lg-field{color:#1c3048}
+.lg-slot{color:#246fb7;border-color:#75b5ee}
+.overlay{background:rgba(34,70,109,.28);backdrop-filter:blur(8px)}
+.win-card{border-color:#c4d9ed;box-shadow:0 14px 32px #426d9624,inset 0 1px #fff}
+#count{background:radial-gradient(ellipse at 50% 0%,#fbfdff,#f0f7ff 58%,#e4effa)}
+#puzzle,#pickPuzzle,#pickColor,#color,#extra,#logic,#memo,#abc{color:#1c3048}
+.palette .sw{box-shadow:0 3px 10px #426d9624}
+.tool[aria-pressed="true"]{outline:1px solid #4ba6ed}
+.sizes button[aria-pressed="true"],.stk-sizes button[aria-pressed="true"]{box-shadow:0 0 0 3px #4ba6ed,0 4px 12px #426d9621}
+.abc-big,.abc-word .first{color:#307fbd}
+.abc-word .blank{border-color:#4ba6ed}
+.abc-key[aria-pressed="true"]{background:linear-gradient(145deg,#86ccff,#4ba6ed);color:#153958;box-shadow:0 5px 0 #327fba}
+.lg-card.ok{background:linear-gradient(145deg,#86ccff,#4ba6ed);color:#153958;box-shadow:0 5px 0 #327fba}
+.lg-card.hint{box-shadow:0 0 0 4px #ffc96a,0 5px 0 #a67727}
+.memo-card.got{box-shadow:0 0 0 4px #4ba6ed,0 5px 14px #426d9621}
+
+.art-txt b{font-size:clamp(44px,38cqi,108px)}
+.art-txt span{font-size:clamp(20px,22cqi,60px);letter-spacing:-.08em}
+.memo-art{width:78%}
+.memo-art i{font-size:clamp(26px,18cqi,58px)}
 </style>
 </head>
 <body>
@@ -1342,21 +1347,21 @@ function openBuilder(v) {
   svg.setAttribute('class', 'bd');
   // garage: wall with tools and a blueprint, floor with a lift; workbench below
   svg.innerHTML = `<defs>` +
-    `<linearGradient id="bdWall" x2="0" y2="1"><stop stop-color="#fffaf1"/><stop offset="1" stop-color="#eee5d7"/></linearGradient>` +
-    `<linearGradient id="bdBench" x2="0" y2="1"><stop stop-color="#f7f1e6"/><stop offset="1" stop-color="#eee6d9"/></linearGradient>` +
-    `<linearGradient id="bdLift" x2="0" y2="1"><stop stop-color="#b6a17e"/><stop offset="1" stop-color="#897552"/></linearGradient>` +
-    `<pattern id="bdGrid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#756548" stroke-opacity=".07" stroke-width="1"/></pattern>` +
-    `<pattern id="hazard" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="14" height="14" fill="#edb75b"/><rect width="7" height="14" fill="#f4eddf"/></pattern></defs>` +
-    `<rect x="4" y="4" width="392" height="248" rx="22" fill="url(#bdWall)" stroke="#756548" stroke-opacity=".22" stroke-width="2"/>` +
-    `<path d="M18 34H382 M18 76H382 M18 218H382" stroke="#756548" stroke-opacity=".1" stroke-width="2"/>` +
-    `<path d="M42 4V86 M358 4V86" stroke="#756548" stroke-opacity=".07" stroke-width="2"/>` +
-    `<rect x="44" y="17" width="118" height="5" rx="2.5" fill="#fffaf1" opacity=".85"/><rect x="238" y="17" width="118" height="5" rx="2.5" fill="#fffaf1" opacity=".8"/>` +
-    `<path d="M66 23L42 108M92 23L76 92M334 23L358 108M308 23L324 92" stroke="#fffaf1" stroke-opacity=".26" stroke-width="18"/>` +
-    `<g opacity=".72"><rect x="312" y="36" width="54" height="42" rx="7" fill="#eee5d7" stroke="#756548" stroke-opacity=".45"/><path d="M321 48H357M321 57H348M321 66H354" stroke="#77674f" stroke-width="2" stroke-linecap="round"/><circle cx="320" cy="42" r="2.5" fill="#3ea99c"/><circle cx="358" cy="42" r="2.5" fill="#edb75b"/></g>` +
-    `<path d="M4 226H396V232Q396 252 376 252H24Q4 252 4 232Z" fill="url(#bdLift)" stroke="#897552" stroke-opacity=".2" stroke-width="2"/>` +
-    `<rect x="44" y="237" width="312" height="7" rx="3.5" fill="url(#hazard)" opacity=".7"/><path d="M60 248V252M340 248V252" stroke="#77674f" stroke-width="4"/>` +
-    `<rect x="4" y="262" width="392" height="274" rx="22" fill="url(#bdBench)" stroke="#756548" stroke-opacity=".22" stroke-width="2"/><rect x="4" y="262" width="392" height="274" rx="22" fill="url(#bdGrid)"/>` +
-    `<path d="M18 274H382" stroke="#3ea99c" stroke-opacity=".2" stroke-width="2"/>` +
+    `<linearGradient id="bdWall" x2="0" y2="1"><stop stop-color="#fafdff"/><stop offset="1" stop-color="#e5f0fb"/></linearGradient>` +
+    `<linearGradient id="bdBench" x2="0" y2="1"><stop stop-color="#f1f8ff"/><stop offset="1" stop-color="#e4effa"/></linearGradient>` +
+    `<linearGradient id="bdLift" x2="0" y2="1"><stop stop-color="#88b4d7"/><stop offset="1" stop-color="#5d8db6"/></linearGradient>` +
+    `<pattern id="bdGrid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#54718e" stroke-opacity=".07" stroke-width="1"/></pattern>` +
+    `<pattern id="hazard" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="14" height="14" fill="#74b8f0"/><rect width="7" height="14" fill="#eaf4ff"/></pattern></defs>` +
+    `<rect x="4" y="4" width="392" height="248" rx="22" fill="url(#bdWall)" stroke="#54718e" stroke-opacity=".22" stroke-width="2"/>` +
+    `<path d="M18 34H382 M18 76H382 M18 218H382" stroke="#54718e" stroke-opacity=".1" stroke-width="2"/>` +
+    `<path d="M42 4V86 M358 4V86" stroke="#54718e" stroke-opacity=".07" stroke-width="2"/>` +
+    `<rect x="44" y="17" width="118" height="5" rx="2.5" fill="#fafdff" opacity=".85"/><rect x="238" y="17" width="118" height="5" rx="2.5" fill="#fafdff" opacity=".8"/>` +
+    `<path d="M66 23L42 108M92 23L76 92M334 23L358 108M308 23L324 92" stroke="#fafdff" stroke-opacity=".26" stroke-width="18"/>` +
+    `<g opacity=".72"><rect x="312" y="36" width="54" height="42" rx="7" fill="#e5f0fb" stroke="#54718e" stroke-opacity=".45"/><path d="M321 48H357M321 57H348M321 66H354" stroke="#58718b" stroke-width="2" stroke-linecap="round"/><circle cx="320" cy="42" r="2.5" fill="#4ba6ed"/><circle cx="358" cy="42" r="2.5" fill="#74b8f0"/></g>` +
+    `<path d="M4 226H396V232Q396 252 376 252H24Q4 252 4 232Z" fill="url(#bdLift)" stroke="#5d8db6" stroke-opacity=".2" stroke-width="2"/>` +
+    `<rect x="44" y="237" width="312" height="7" rx="3.5" fill="url(#hazard)" opacity=".7"/><path d="M60 248V252M340 248V252" stroke="#58718b" stroke-width="4"/>` +
+    `<rect x="4" y="262" width="392" height="274" rx="22" fill="url(#bdBench)" stroke="#54718e" stroke-opacity=".22" stroke-width="2"/><rect x="4" y="262" width="392" height="274" rx="22" fill="url(#bdGrid)"/>` +
+    `<path d="M18 274H382" stroke="#4ba6ed" stroke-opacity=".2" stroke-width="2"/>` +
     `<g id="bdSlots"></g><g class="ghost">${v.parts.map(pt => pt.s).join('')}</g><g id="bdPlaced"></g><g id="bdHole" class="hole"></g><g id="bdLoose"></g>` +
     `<text id="bdHand" font-size="46" opacity="0" pointer-events="none">👆</text>`;
   svg.querySelectorAll('.ghost [data-c]').forEach(el => { el.style.fill = el.dataset.c; });
