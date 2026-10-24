@@ -19,7 +19,7 @@ img{max-width:100%}
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
 <style>
 :root{
   --bg:#E7F0FA;
@@ -504,6 +504,68 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
   #bdSvg .part.anim,#bdPlaced.drive{transition:none}
   #bdPlaced.spin .wheelpart .pin{animation:none}
 }
+/* Shared dark-garage visual system across the whole app. */
+:root{
+  --bg:#101a29;
+  --card:#1b2a3c;
+  --muted:#a8b8ca;
+  --shadow:rgba(0,0,0,.42);
+  --leaf:#62dad2;
+  --sun:#ffc96a;
+  --sky:#72c8e5;
+  color-scheme:dark;
+}
+body{color:#eef5ff;background:radial-gradient(ellipse at 50% 0%,#263b53 0%,#172638 46%,#0c1420 100%);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+.scene-bg{display:none}
+.twinkles{opacity:.18}
+#home{background:radial-gradient(ellipse at 50% 20%,#263b53 0%,#172638 52%,#0c1420 100%)}
+#home .home-top .stars,.btn,.install,.seg button,.tool,.sizes button,.stk-sizes button,.lg-tile,.lg-q,.lg-card,.memo-card .face,.win-card,.abc-card,.abc-key{border:1px solid #d7e9f21c}
+#home .home-top .stars{background:linear-gradient(145deg,#22364c,#172638);color:#eef5ff;box-shadow:0 6px 18px #0003}
+#home .btn,.btn,.seg button,.tool,.sizes button,.stk-sizes button{background:linear-gradient(145deg,#263a51,#1b2c40);color:#eef5ff;box-shadow:0 5px 16px #0003}
+.btn.primary{background:linear-gradient(145deg,#ffb25c,#ef793b);color:#fff;box-shadow:0 5px 0 #8d4428}
+.btn.green{background:linear-gradient(145deg,#62dad2,#36a9a8);color:#10252c;box-shadow:0 5px 0 #247b82}
+.install{background:linear-gradient(145deg,#21354a,#192a3c);color:#eaf2fb;box-shadow:0 6px 18px #0003}
+.install .x{background:#263b53;color:#eef5ff}
+.topbar{background:linear-gradient(180deg,#101a29b0,transparent);color:#eef5ff}
+.topbar h2{color:#eef5ff}
+.lead,.seg-label,.pz-progress,.cl-hint{color:#a8b8ca}
+.home-body h1 span{background:linear-gradient(100deg,#62dad2,#b6eee4 48%,#ffc96a 86%);background-size:180% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+.mode{border:1px solid #e7f1fa20;box-shadow:0 7px 0 #0a111b,inset 0 1px #ffffff14}
+.mode::after{display:none}
+.mode-puzzle{background:linear-gradient(145deg,#334057,#202d3d);border-color:#ffc96a55}
+.mode-color{background:linear-gradient(145deg,#2b4560,#1c3045);border-color:#72c8e555}
+.mode-count{background:linear-gradient(145deg,#284a4c,#1c343c);border-color:#62dad255}
+.mode-abc{background:linear-gradient(145deg,#493a3c,#312c39);border-color:#ffad7955}
+.mode-logic{background:linear-gradient(145deg,#423b3a,#302b36);border-color:#ffc96a55}
+.mode-memo{background:linear-gradient(145deg,#284747,#27354c);border-color:#62dad255}
+.mode-name{color:#eef5ff}
+.mode-sub{color:#c1cfdd;opacity:.82}
+.mode-art{background:linear-gradient(145deg,#152437,#233a50);box-shadow:inset 0 0 0 1px #ffffff23,0 5px 16px #0003}
+.mode-art .art-txt b{color:#ff9d56}
+#app .seg button[aria-pressed="true"],.tool[aria-pressed="true"]{background:linear-gradient(145deg,#62dad2,#369da6);color:#10252c;box-shadow:0 4px 0 #247b82}
+.seg.icons button[aria-pressed="true"]{transform:translateY(-2px)}
+.grid .tile,.lg-tile,.lg-q,.lg-card,.abc-card,.abc-key,.win-card{background:linear-gradient(145deg,#22364b,#18283a);color:#eef5ff;box-shadow:0 6px 18px #0003}
+.tile[data-i],.tile[data-dot]{border:1px solid #d7e9f228}
+.memo-card{background:linear-gradient(145deg,#345c73,#263954);border:1px solid #d7e9f22b;box-shadow:0 5px 18px #0004}
+.memo-card .face{background:linear-gradient(145deg,#263d55,#18283a);color:#eef5ff}
+.memo-ico i{background:linear-gradient(145deg,#62dad2,#416f8a);border-color:#d7e9f266}
+#memoSeg button[aria-pressed="true"] .memo-ico i{background:#19333d}
+.lg-mix{background:linear-gradient(135deg,#574363,#343e62);border:1px solid #c8b0e755}
+.lg-field{color:#eef5ff}
+.lg-slot{color:#ffc96a;border-color:#ffc96a}
+.overlay{background:rgba(5,12,22,.72);backdrop-filter:blur(8px)}
+.win-card{border-color:#d7e9f226;box-shadow:0 14px 36px #0006,inset 0 1px #ffffff14}
+#count{background:radial-gradient(ellipse at 50% 0%,#263b53,#172638 58%,#0c1420)}
+#puzzle,#pickPuzzle,#pickColor,#color,#extra,#logic,#memo,#abc{color:#eef5ff}
+.palette .sw{box-shadow:0 4px 12px #0005}
+.tool[aria-pressed="true"]{outline:1px solid #62dad2}
+.sizes button[aria-pressed="true"],.stk-sizes button[aria-pressed="true"]{box-shadow:0 0 0 3px #62dad2,0 4px 12px #0004}
+.abc-big,.abc-word .first{color:#ffc96a}
+.abc-word .blank{border-color:#62dad2}
+.abc-key[aria-pressed="true"]{background:linear-gradient(145deg,#62dad2,#369da6);color:#10252c;box-shadow:0 5px 0 #247b82}
+.lg-card.ok{background:linear-gradient(145deg,#62dad2,#369da6);color:#10252c;box-shadow:0 5px 0 #247b82}
+.lg-card.hint{box-shadow:0 0 0 4px #ffc96a,0 5px 0 #0004}
+.memo-card.got{box-shadow:0 0 0 4px #62dad2,0 5px 18px #0004}
 </style>
 </head>
 <body>
